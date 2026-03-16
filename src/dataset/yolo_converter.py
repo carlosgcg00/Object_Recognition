@@ -48,17 +48,19 @@ def process_video_to_yolo(
     gt_path: Union[str, Path], 
     output_img_dir: Union[str, Path], 
     output_lbl_dir: Union[str, Path],
+    class_map: Dict[int, int], # <--- NUEVO ARGUMENTO AÑADIDO
     frame_step: int = 1
 ) -> None:
     """
     Extracts frames from a video and converts their annotations to YOLO format.
 
     Args:
-        video_path (Union[str, Path]): Path to the raw .mp4 video.
-        gt_path (Union[str, Path]): Path to the raw .txt ground truth.
-        output_img_dir (Union[str, Path]): Directory to save the extracted .jpg frames.
-        output_lbl_dir (Union[str, Path]): Directory to save the YOLO .txt labels.
-        frame_step (int, optional): Extract every N-th frame. Defaults to 1 (all frames).
+        video_path: Path to the raw .mp4 video.
+        gt_path: Path to the raw .txt ground truth.
+        output_img_dir: Directory to save the extracted .jpg frames.
+        output_lbl_dir: Directory to save the YOLO .txt labels.
+        class_map: Dictionary to map original IDs to YOLO IDs (e.g., {6: 0, 7: 1, 8: 2}).
+        frame_step: Extract every N-th frame. Defaults to 1 (all frames).
     """
     video_path = Path(video_path)
     gt_path = Path(gt_path)
@@ -103,13 +105,23 @@ def process_video_to_yolo(
             yolo_lines = []
             if frame_id in anns_by_frame:
                 for ann in anns_by_frame[frame_id]:
+                    # ----> NUEVO: REMAPEO DEL ID AL VUELO <----
+                    original_id = ann['class_id']
+                    
+                    # Si el ID original no está en nuestro mapa, lo saltamos para evitar errores
+                    if original_id not in class_map:
+                        continue
+                        
+                    yolo_id = class_map[original_id]
+
                     x_n, y_n, w_n, h_n = normalize_bbox(
                         ann['top_left_x'], ann['top_left_y'], 
                         ann['width'], ann['height'], 
                         img_w, img_h
                     )
-                    # Format: class_id x_center y_center width height
-                    yolo_lines.append(f"{ann['class_id']} {x_n:.6f} {y_n:.6f} {w_n:.6f} {h_n:.6f}")
+                    
+                    # Usamos el yolo_id (0, 1, 2) en lugar de ann['class_id'] (6, 7, 8)
+                    yolo_lines.append(f"{yolo_id} {x_n:.6f} {y_n:.6f} {w_n:.6f} {h_n:.6f}")
 
             # Define output filenames
             img_filename = f"{base_name}_frame_{frame_id}.jpg"
@@ -121,8 +133,7 @@ def process_video_to_yolo(
             # Save the image
             cv2.imwrite(str(img_out_path), frame)
             
-            # Save the annotations (even if empty, to tell YOLO there are no objects, 
-            # or you can choose to skip saving empty txts depending on your YOLO version)
+            # Save the annotations
             save_txt(yolo_lines, lbl_out_path)
             
             extracted_count += 1
@@ -131,53 +142,3 @@ def process_video_to_yolo(
 
     cap.release()
     print(f"Successfully processed {video_path.name}: {extracted_count} frames saved.")
-
-
-def convert_yolo_split_to_coco(
-    yolo_split_txt: Path, 
-    output_json: Path, 
-    class_names: List[str]
-) -> None:
-    """
-    Converts a YOLO split .txt file into a COCO format .json file.
-    """
-    coco_data = {
-        "info": {"description": "Dataset exported from YOLO to COCO"},
-        "categories": [{"id": i, "name": name} for i, name in enumerate(class_names)],
-        "images": [],
-        "annotations": []
-    }
-    
-    with open(yolo_split_txt, 'r', encoding='utf-8') as f:
-        image_paths = [Path(line.strip()) for line in f.readlines() if line.strip()]
-        
-    ann_id = 1
-    for img_id, img_path in enumerate(image_paths, start=1):
-        img = cv2.imread(str(img_path))
-        if img is None: continue
-            
-        h, w, _ = img.shape
-        coco_data["images"].append({
-            "id": img_id, "file_name": str(img_path.resolve()), "width": w, "height": h
-        })
-        
-        lbl_path = Path(str(img_path).replace('/images/', '/labels/').replace('.jpg', '.txt'))
-        if lbl_path.exists():
-            with open(lbl_path, 'r', encoding='utf-8') as f:
-                for line in f:
-                    parts = line.strip().split()
-                    if len(parts) < 5: continue
-                    
-                    c_id, x_c, y_c, w_n, h_n = int(parts[0]), *map(float, parts[1:5])
-                    w_px, h_px = w_n * w, h_n * h
-                    x_min, y_min = (x_c * w) - (w_px / 2.0), (y_c * h) - (h_px / 2.0)
-                    
-                    coco_data["annotations"].append({
-                        "id": ann_id, "image_id": img_id, "category_id": c_id,
-                        "bbox": [round(x_min, 2), round(y_min, 2), round(w_px, 2), round(h_px, 2)],
-                        "area": round(w_px * h_px, 2), "iscrowd": 0
-                    })
-                    ann_id += 1
-                    
-    with open(output_json, 'w', encoding='utf-8') as f:
-        json.dump(coco_data, f, indent=4)
