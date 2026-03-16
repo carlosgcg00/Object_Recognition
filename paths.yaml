@@ -1,0 +1,12 @@
+dataset:
+    path: "./dataset"
+    classes:
+        - "horse"
+        - "pig"
+        - "penguin"
+    gt: 
+      path: "gt"
+      extension: ".txt"
+    videos: 
+      path: "videos"
+      extension: ".mp4"
