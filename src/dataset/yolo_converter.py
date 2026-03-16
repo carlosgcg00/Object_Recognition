@@ -1,14 +1,14 @@
 # src/dataset/yolo_converter.py
+
 import cv2
-import json
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Tuple, Union
+from typing import List, Dict, Tuple, Union
 
+# Import our utilities and analyzer
 from utils.file_utils import load_gt, save_txt
 from utils.video_utils import extract_video_info
 from dataset.analyzer import parse_annotations
-
 
 def normalize_bbox(
     x_tl: int, 
@@ -20,10 +20,22 @@ def normalize_bbox(
 ) -> Tuple[float, float, float, float]:
     """
     Converts top-left bounding box coordinates to YOLO normalized format.
+
+    Args:
+        x_tl (int): Top-left X coordinate.
+        y_tl (int): Top-left Y coordinate.
+        w_box (int): Box width.
+        h_box (int): Box height.
+        img_width (int): Full image width.
+        img_height (int): Full image height.
+
+    Returns:
+        Tuple[float, float, float, float]: Normalized (x_center, y_center, width, height).
     """
     x_center = x_tl + (w_box / 2.0)
     y_center = y_tl + (h_box / 2.0)
 
+    # Normalize values to be between 0.0 and 1.0
     x_norm = x_center / img_width
     y_norm = y_center / img_height
     w_norm = w_box / img_width
@@ -31,33 +43,52 @@ def normalize_bbox(
 
     return x_norm, y_norm, w_norm, h_norm
 
-
 def process_video_to_yolo(
     video_path: Union[str, Path], 
     gt_path: Union[str, Path], 
     output_img_dir: Union[str, Path], 
     output_lbl_dir: Union[str, Path],
-    class_map: Dict[int, int],
     frame_step: int = 1
 ) -> None:
     """
-    Extracts frames and converts annotations to YOLO format with ID remapping.
+    Extracts frames from a video and converts their annotations to YOLO format.
+
+    Args:
+        video_path (Union[str, Path]): Path to the raw .mp4 video.
+        gt_path (Union[str, Path]): Path to the raw .txt ground truth.
+        output_img_dir (Union[str, Path]): Directory to save the extracted .jpg frames.
+        output_lbl_dir (Union[str, Path]): Directory to save the YOLO .txt labels.
+        frame_step (int, optional): Extract every N-th frame. Defaults to 1 (all frames).
     """
-    video_path, gt_path = Path(video_path), Path(gt_path)
+    video_path = Path(video_path)
+    gt_path = Path(gt_path)
+    output_img_dir = Path(output_img_dir)
+    output_lbl_dir = Path(output_lbl_dir)
+
+    # Ensure output directories exist
     output_img_dir.mkdir(parents=True, exist_ok=True)
     output_lbl_dir.mkdir(parents=True, exist_ok=True)
 
+    # 1. Extract video info for normalization
     v_info = extract_video_info(video_path)
     img_w, img_h = v_info['width'], v_info['height']
-    
+    base_name = video_path.stem
+
+    # 2. Load and parse Ground Truth
     raw_gt = load_gt(gt_path)
     parsed_anns = parse_annotations(raw_gt)
 
+    # Group annotations by frame_id
     anns_by_frame = defaultdict(list)
     for ann in parsed_anns:
         anns_by_frame[ann['frame_id']].append(ann)
 
+    # 3. Process video frames
     cap = cv2.VideoCapture(str(video_path))
+    if not cap.isOpened():
+        print(f"Error: Cannot open video {video_path.name}")
+        return
+
     frame_id = 1
     extracted_count = 0
 
@@ -66,34 +97,40 @@ def process_video_to_yolo(
         if not ret:
             break
 
+        # Process only every `frame_step` frames
         if frame_id % frame_step == 0:
+            # Prepare YOLO annotations for this specific frame
             yolo_lines = []
             if frame_id in anns_by_frame:
                 for ann in anns_by_frame[frame_id]:
-                    original_id = ann['class_id']
-                    if original_id not in class_map:
-                        continue
-                        
-                    yolo_id = class_map[original_id]
                     x_n, y_n, w_n, h_n = normalize_bbox(
                         ann['top_left_x'], ann['top_left_y'], 
                         ann['width'], ann['height'], 
                         img_w, img_h
                     )
-                    yolo_lines.append(f"{yolo_id} {x_n:.6f} {y_n:.6f} {w_n:.6f} {h_n:.6f}")
+                    # Format: class_id x_center y_center width height
+                    yolo_lines.append(f"{ann['class_id']} {x_n:.6f} {y_n:.6f} {w_n:.6f} {h_n:.6f}")
 
-            base_name = video_path.stem
-            img_out_path = output_img_dir / f"{base_name}_frame_{frame_id}.jpg"
-            lbl_out_path = output_lbl_dir / f"{base_name}_frame_{frame_id}.txt"
+            # Define output filenames
+            img_filename = f"{base_name}_frame_{frame_id}.jpg"
+            lbl_filename = f"{base_name}_frame_{frame_id}.txt"
+            
+            img_out_path = output_img_dir / img_filename
+            lbl_out_path = output_lbl_dir / lbl_filename
 
+            # Save the image
             cv2.imwrite(str(img_out_path), frame)
+            
+            # Save the annotations (even if empty, to tell YOLO there are no objects, 
+            # or you can choose to skip saving empty txts depending on your YOLO version)
             save_txt(yolo_lines, lbl_out_path)
+            
             extracted_count += 1
 
         frame_id += 1
 
     cap.release()
-    print(f"Finished {video_path.name}: {extracted_count} frames.")
+    print(f"Successfully processed {video_path.name}: {extracted_count} frames saved.")
 
 
 def convert_yolo_split_to_coco(
