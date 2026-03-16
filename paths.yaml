@@ -1,12 +1,19 @@
 dataset:
-    path: "./dataset"
-    classes:
-        - "horse"
-        - "pig"
-        - "penguin"
-    gt: 
-      path: "gt"
-      extension: ".txt"
-    videos: 
-      path: "videos"
-      extension: ".mp4"
+  raw_path: "./dataset/raw"
+  processed_path: "./dataset/processed"
+  
+  classes:
+    horse: 6
+    penguin: 7
+    pig: 8
+    
+  raw_structure: 
+    gt_dir: "gt"
+    gt_ext: ".txt"
+    video_dir: "videos"
+    video_ext: ".mp4"
+
+training:
+  img_size: 640
+  batch_size: 16
+  epochs: 100
