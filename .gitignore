@@ -11,5 +11,8 @@ wheels/
 dataset
 models
 
+# Ficheros .mp4
+*.mp4
+
 !src/dataset
 !src/models
