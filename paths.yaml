@@ -13,6 +13,10 @@ dataset:
     video_dir: "videos"
     video_ext: ".mp4"
 
+models:
+  efficientdet:
+    path: "./models/efficientdet"
+
 training:
   img_size: 640
   batch_size: 16

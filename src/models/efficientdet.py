@@ -2,17 +2,16 @@ import torch
 from effdet import create_model, DetBenchTrain, DetBenchPredict
 
 class EfficientDetModel:
-    def __init__(self, model_name='efficientdet_d0', num_classes=80, image_size=(512, 512), pretrained=True, bench_task='train'):
+    def __init__(self, model_name='efficientdet_d0', num_classes=80, image_size=(512, 512), pretrained=True):
         self.model_name = model_name
         self.num_classes = num_classes
         self.image_size = image_size
         self.pretrained = pretrained
-        self.bench_task = bench_task
         
         # 1. Crear el modelo base (Backbone + BiFPN + Head)
         self.model = create_model(
             self.model_name,
-            bench_task=self.bench_task, # Lo dejamos vacío para añadir el bench manualmente después
+            bench_task='',
             num_classes=self.num_classes,
             pretrained=self.pretrained,
             image_size=self.image_size
@@ -35,6 +34,14 @@ class EfficientDetModel:
         predict_bench = DetBenchPredict(self.model).to(device)
         predict_bench.eval() # Modo evaluación por defecto
         return predict_bench
+        
+def get_train_bench(num_classes=3, image_size=(512, 512), device='cpu'):
+    detector = EfficientDetModel(num_classes=num_classes, image_size=image_size)
+    return detector.get_train_model(device)
+
+def get_predict_model(checkpoint_path, num_classes=3, image_size=(512, 512), device='cpu'):
+    detector = EfficientDetModel(num_classes=num_classes, image_size=image_size, pretrained=False)
+    return detector.get_predict_model(checkpoint_path, device)
 
 # --- Ejemplo de uso ---
 if __name__ == "__main__":
