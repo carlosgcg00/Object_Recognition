@@ -8,6 +8,7 @@ import numpy as np
 from torchmetrics.detection.mean_ap import MeanAveragePrecision
 import datetime
 import yaml
+import gc
 
 # Importaciones de TU proyecto
 from dataset.efficientdet_dataset import EfficientDetDataset
@@ -112,7 +113,7 @@ def train_efficientdet_pipeline(
     
     # 1. Configuración de datos
     config = read_yaml(yaml_path)
-    class_names = {i: name for i, name in enumerate(config['names'])} 
+    class_names = {i+1: name for i, name in enumerate(config['names'])} 
     num_classes = len(class_names)
     
     train_ds = EfficientDetDataset(Path(config['train']), img_size, get_transforms('train', img_size))
@@ -336,3 +337,13 @@ def train_efficientdet_pipeline(
         print(f"⚠️ Aviso: No se pudieron generar las gráficas ({e})")
         
     print(f"🎉 Entregable final generado en {out_dir}")
+    
+    # ==========================================
+    # CLEANUP
+    # =========================================
+    del model, optimizer, scheduler, warmup_scheduler, train_loader, val_loader, test_loader, train_ds, val_ds, test_ds
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        
+    print("🧹 Memoria limpiada, pipeline finalizado.")

@@ -25,10 +25,10 @@ def get_transforms(mode: str, target_size=512):
             A.HorizontalFlip(p=0.5),
             
             A.CoarseDropout(
-                max_holes=8, 
-                max_height=int(target_size * 0.1), 
-                max_width=int(target_size * 0.1), 
-                p=0.3
+                max_holes=3, 
+                max_height=int(target_size * 0.05), 
+                max_width=int(target_size * 0.05), 
+                p=0.1
             ),
             
             A.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1, p=0.4),
