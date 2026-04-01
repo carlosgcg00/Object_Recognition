@@ -5,6 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 from typing import List, Dict, Union, Optional, Tuple
+import torch
+
 
 def get_class_color(class_id: int) -> Tuple[int, int, int]:
     """
@@ -287,3 +289,105 @@ def export_annotated_video(
         cap.release()
         writer.release()
         print(f"Success: Annotated video saved to {output_path}")
+
+
+def save_evaluation_grid(img_tensor, gt_dict, pred_tensor, class_names, out_path, score_thresh=0.3):
+    img_np = img_tensor.permute(1, 2, 0).cpu().numpy()
+    mean = np.array([0.485, 0.456, 0.406])
+    std = np.array([0.229, 0.224, 0.225])
+    img_np = (img_np * std) + mean
+    img_np = np.clip(img_np, 0, 1)
+    img_np = (img_np * 255).astype(np.uint8)
+    
+    img_np = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
+    img_np = np.ascontiguousarray(img_np)
+    
+    GT_COLOR = (0, 255, 0)   
+    PRED_COLOR = (0, 0, 255) 
+    FONT = cv2.FONT_HERSHEY_SIMPLEX
+
+    gt_boxes = gt_dict['bbox'].cpu().numpy()
+    gt_labels = gt_dict['cls'].cpu().numpy()
+    
+    for box, label_id in zip(gt_boxes, gt_labels):
+        y_min, x_min, y_max, x_max = map(int, box) 
+        name = class_names.get(int(label_id), f"ID:{label_id}")
+        
+        cv2.rectangle(img_np, (x_min, y_min), (x_max, y_max), GT_COLOR, 2)
+        label_txt = f"GT:{name}"
+        (w, h), _ = cv2.getTextSize(label_txt, FONT, 0.4, 1)
+        cv2.rectangle(img_np, (x_min, y_min - h - 5), (x_min + w, y_min), GT_COLOR, -1)
+        cv2.putText(img_np, label_txt, (x_min, y_min - 5), FONT, 0.4, (0, 0, 0), 1, cv2.LINE_AA)
+
+    if pred_tensor is not None and len(pred_tensor) > 0:
+        preds = pred_tensor.cpu().numpy()
+        valid_preds = preds[preds[:, 4] > score_thresh]
+        
+        for pred in valid_preds:
+            x_min, y_min, x_max, y_max, score, label_id = pred 
+            x_min, y_min, x_max, y_max = map(int, [x_min, y_min, x_max, y_max])
+            name = class_names.get(int(label_id), f"ID:{label_id}")
+
+            cv2.rectangle(img_np, (x_min, y_min), (x_max, y_max), PRED_COLOR, 2)
+            pred_txt = f"PR:{name} {score:.2f}"
+            (w, h), _ = cv2.getTextSize(pred_txt, FONT, 0.4, 1)
+            cv2.rectangle(img_np, (x_min, y_max), (x_min + w, y_max + h + 5), PRED_COLOR, -1)
+            cv2.putText(img_np, pred_txt, (x_min, y_max + h + 2), FONT, 0.4, (255, 255, 255), 1, cv2.LINE_AA)
+
+    cv2.imwrite(str(out_path), img_np)
+
+def plot_training_curves(history: dict, output_dir: Path, epochs_TL: int, class_names: dict):
+    epochs = range(1, len(history['train_loss']) + 1)
+    fig, axs = plt.subplots(2, 2, figsize=(18, 12))
+    
+    def add_transition_line(ax):
+        ax.axvline(x=epochs_TL, color='gray', linestyle='--', linewidth=2, label='FT Start')
+
+    # 1. Loss Breakdown
+    axs[0, 0].plot(epochs, history['train_loss'], label='Total Loss', color='black', linewidth=2)
+    axs[0, 0].plot(epochs, history['train_class_loss'], label='Class Loss', color='black', linestyle='--')
+    axs[0, 0].plot(epochs, history['val_loss'], label='Validation Loss', color='red', linewidth=2)
+    axs[0, 0].plot(epochs, history['val_class_loss'], label='Val Class Loss', color='red', linestyle='--')
+    add_transition_line(axs[0, 0])
+    axs[0, 0].set_title('Loss Components Breakdown')
+    axs[0, 0].set_ylabel('Loss Value')
+    axs[0, 0].legend()
+    axs[0, 0].grid(True, alpha=0.3)
+    
+    # 2. Global mAP
+    axs[0, 1].plot(epochs, history['val_map50'], label='mAP@50', color='green', marker='o')
+    axs[0, 1].plot(epochs, history['val_map75'], label='mAP@75', color='darkgreen', marker='x')
+    add_transition_line(axs[0, 1])
+    axs[0, 1].set_title('Global Detection Performance')
+    axs[0, 1].set_ylabel('mAP Score')
+    axs[0, 1].legend()
+    axs[0, 1].grid(True, alpha=0.3)
+    
+    # 3. Learning Rate
+    axs[1, 0].plot(epochs, history['lr'], label='LR', color='orange', linewidth=2)
+    add_transition_line(axs[1, 0])
+    axs[1, 0].set_title('Learning Rate Schedule')
+    axs[1, 0].set_xlabel('Epoch')
+    axs[1, 0].set_ylabel('Learning Rate')
+    axs[1, 0].set_yscale('log') 
+    axs[1, 0].legend()
+    axs[1, 0].grid(True, alpha=0.3)
+    
+    # 4. Per-Class mAP@50
+    colors = ['purple', 'cyan', 'magenta', 'brown', 'pink']
+    for idx, (c_id, map_list) in enumerate(history['val_map50_per_class'].items()):
+        c_name = class_names[c_id]
+        c_color = colors[idx % len(colors)]
+        axs[1, 1].plot(epochs, map_list, label=f'{c_name.capitalize()} (ID:{c_id})', color=c_color, marker='s', markersize=4)
+        
+    add_transition_line(axs[1, 1])
+    axs[1, 1].set_title('mAP@50 per Class')
+    axs[1, 1].set_xlabel('Epoch')
+    axs[1, 1].set_ylabel('mAP@50 Score')
+    axs[1, 1].legend()
+    axs[1, 1].grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.savefig(output_dir / 'training_dashboard.png', dpi=200)
+    print(f"✅ Training dashboard saved to {output_dir / 'training_dashboard.png'}")
+    plt.close(fig)
