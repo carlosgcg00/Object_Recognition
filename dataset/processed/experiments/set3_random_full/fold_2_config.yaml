@@ -1,0 +1,6 @@
+train: /root/MURIA/Object_Recognition/dataset/processed/experiments/set3_random_full/fold_2_train.txt
+val: /root/MURIA/Object_Recognition/dataset/processed/experiments/set3_random_full/fold_2_val.txt
+test: /root/MURIA/Object_Recognition/dataset/processed/experiments/set3_random_full/test.txt
+
+nc: 3
+names: ['horse', 'penguin', 'pig']
