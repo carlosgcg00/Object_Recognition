@@ -15,27 +15,27 @@ def get_transforms(mode: str, target_size=512):
     """
     if mode == 'train':
         return A.Compose([
-            # 1. Recorte aleatorio (50% de probabilidad)
-            A.RandomResizedCrop(
-                size=(target_size, target_size), 
-                scale=(0.5, 1.0), 
+            A.Affine(
+                translate_percent=0.1,
+                scale=(0.8, 1.2),
+                rotate=(-15, 15),
                 p=0.5
             ),
             
             A.HorizontalFlip(p=0.5),
             
             A.CoarseDropout(
-                max_holes=3, 
-                max_height=int(target_size * 0.05), 
-                max_width=int(target_size * 0.05), 
+                num_holes_range=(1, 3),
+                hole_height_range=(1, int(target_size * 0.05)),
+                hole_width_range=(1, int(target_size * 0.05)),
                 p=0.1
             ),
             
             A.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1, p=0.4),
+            A.GaussNoise(p=0.2),
+            A.Blur(blur_limit=3, p=0.1),
             
             # --- EL SEGURO DE VIDA ---
-            # Si RandomResizedCrop NO se activó, esta línea asegura que 
-            # la imagen sea 512x512 sí o sí antes de salir.
             A.Resize(height=target_size, width=target_size, p=1.0), 
             
             A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
