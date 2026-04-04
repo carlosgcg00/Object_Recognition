@@ -97,7 +97,75 @@ def plot_image(
         plt.savefig(str(save_path), dpi=150, bbox_inches='tight')
         
     plt.show()
-    plt.close(fig) # CRITICAL: Prevents memory leaks in Jupyter Notebooks
+    plt.close(fig)
+
+
+def plot_class_samples(scanned_data, class_name, frame_id=100, save_path = None):
+    """
+    Plots a grid showing one specific frame from every video of a given class.
+    Includes the video name and its resolution in the title.
+    
+    Args: 
+    - scanned_data: The full dataset information as returned by the scanning function.
+    - class_name: The name of the class to filter videos by (e.g., 'car').
+    - frame_id: The specific frame number to extract from each video (1-based index).
+    - save_path: Optional path to save the resulting figure as a PDF.
+    
+    """
+    # Filtrar solo los vídeos de la clase especificada
+    videos_list = scanned_data['data'].get(class_name, [])
+    n_videos = len(videos_list)
+    
+    if n_videos == 0:
+        print(f"No hay videos para la clase {class_name}")
+        return
+
+    # Calcular filas y columnas para el subplot (ej. 2 filas de 3 columnas para 6 vídeos)
+    cols = 3
+    rows = (n_videos + cols - 1) // cols 
+    
+    fig, axes = plt.subplots(rows, cols, figsize=(18, 5 * rows), dpi=100)
+    axes = axes.flatten() # Aplanar para iterar fácilmente
+
+    for i, item in enumerate(videos_list):
+        video_path = str(item['video'])
+        
+        cap = cv2.VideoCapture(video_path)
+        if cap.isOpened():
+            # Extraer resolución
+            w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            
+            # Leer el frame específico
+            cap.set(cv2.CAP_PROP_POS_FRAMES, frame_id)
+            ret, frame = cap.read()
+            
+            if ret:
+                # Convertir a RGB para Matplotlib
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                
+                axes[i].imshow(frame_rgb)
+                # Título con nombre del vídeo y resolución
+                axes[i].set_title(f"{item['video'].stem}\nResolución: {w}x{h}", fontsize=12)
+            else:
+                axes[i].set_title(f"Error reading frame\n{item['video'].stem}")
+                
+            cap.release()
+            
+        axes[i].axis('off')
+
+    # Ocultar los ejes sobrantes si n_videos no es múltiplo de cols
+    for j in range(i + 1, len(axes)):
+        axes[j].axis('off')
+
+    plt.tight_layout()
+    if save_path:
+        Path(save_path).parent.mkdir(parents=True, exist_ok=True)
+        plt.savefig(str(save_path), format = 'pdf', dpi=150, bbox_inches='tight')
+        
+    plt.show()
+    plt.close(fig)
+
 
 def visualize_yolo_label(
     image_path: Union[str, Path], 
@@ -233,7 +301,7 @@ def plot_video_frames_grid(
         plt.savefig(str(save_path), format = 'pdf', dpi=150, bbox_inches='tight')
         
     plt.show()
-    plt.close(fig) # Liberar memoria
+    plt.close(fig) 
 
 
 def export_annotated_video(
