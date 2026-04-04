@@ -12,12 +12,32 @@ This notebook automates a video restoration pipeline. It upscales videos to 4K u
 1. Define your `input_path` and `output_path` in the "User Configuration" cell.
 2. Run all cells (`Runtime -> Run all`)."""))
 
+# Configure notebook metadata for Colab GPU
+nb.metadata = {
+    "accelerator": "GPU",
+    "colab": {
+        "gpuType": "all",
+        "provenance": []
+    },
+    "kernelspec": {
+        "display_name": "Python 3",
+        "name": "python3"
+    },
+    "language_info": {
+        "name": "python"
+    }
+}
+
 # Cell 1: Environment Setup
 nb.cells.append(new_markdown_cell("""## 1. Environment Setup
-Install dependencies, clone repositories, and download models."""))
+Install dependencies, clone repositories, download models, and apply necessary patches for Colab."""))
 
 nb.cells.append(new_code_cell("""# @title Setup Environment (Run Once)
 import os
+import sys
+
+# Install missing dependency
+!pip install sk-video
 
 # Clone Real-ESRGAN
 !git clone https://github.com/xinntao/Real-ESRGAN.git
@@ -26,6 +46,32 @@ import os
 !pip install basicsr facexlib gfpgan
 !pip install -r requirements.txt
 !python setup.py develop
+
+# Fix the basicsr compatibility issue
+try:
+    import basicsr
+    # Dynamically find the basicsr installation path
+    basicsr_path = os.path.dirname(basicsr.__file__)
+    file_path = os.path.join(basicsr_path, 'data', 'degradations.py')
+
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as f:
+            content = f.read()
+
+        # Replace the outdated import with the modern one
+        updated_content = content.replace(
+            'from torchvision.transforms.functional_tensor import rgb_to_grayscale',
+            'from torchvision.transforms.functional import rgb_to_grayscale'
+        )
+
+        with open(file_path, 'w') as f:
+            f.write(updated_content)
+        print(f"Successfully patched {file_path}")
+    else:
+        print(f"Degradations file not found at {file_path}")
+except ImportError:
+    print("Could not import basicsr to apply the patch. Ensure it installed correctly.")
+
 # Download RealESRGAN x4plus model
 !wget https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth -P experiments/pretrained_models
 %cd ..
