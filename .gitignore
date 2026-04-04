@@ -14,5 +14,9 @@ models
 # Ficheros .mp4
 *.mp4
 
+# Tensores
+*.pt
+*.pth
+
 !src/dataset
 !src/models

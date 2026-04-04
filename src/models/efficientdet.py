@@ -4,6 +4,7 @@ import torch.nn as nn
 from pathlib import Path
 from typing import Optional, Union
 from effdet import create_model, create_model_from_config, get_efficientdet_config, DetBenchTrain, DetBenchPredict
+import math
 
 class EfficientDet(nn.Module):
     """
@@ -124,31 +125,26 @@ class EfficientDet(nn.Module):
             self.train()
 
     def load_checkpoint(self, checkpoint_path: Union[str, Path]):
-        """ Loads weights cleaning common save prefixes.
-        
-        Args:
-            checkpoint_path (Union[str, Path]): The path to the checkpoint.
-        
-        Returns:
-            None
-        """
         checkpoint_path = Path(checkpoint_path)
         if not checkpoint_path.exists():
             raise FileNotFoundError(f"No checkpoint found at: {checkpoint_path}")
         
         state_dict = torch.load(checkpoint_path, map_location='cpu')
-        # If it was saved as a training dict, we extract the model_state_dict
         if 'model_state_dict' in state_dict:
             state_dict = state_dict['model_state_dict']
             
-        # Cleaning prefixes 'model.' or 'base_model.' if they exist
         new_state_dict = {}
         for k, v in state_dict.items():
-            name = k.replace('model.', '').replace('base_model.', '')
+            name = k.replace('model.', '').replace('base_model.', '').replace('module.', '')
             new_state_dict[name] = v
             
-        self.model.load_state_dict(new_state_dict, strict=False)
-        print(f"✅ Weights loaded successfully from {checkpoint_path.name}")    
+        # --- NUEVO: Borrar las anclas cacheadas que el modelo base no necesita ---
+        if "anchors.boxes" in new_state_dict:
+            del new_state_dict["anchors.boxes"]
+            
+        # Inyectamos en la red base
+        self.model.model.load_state_dict(new_state_dict, strict=True)
+        print(f"✅ Weights loaded successfully from {checkpoint_path.name}") 
 
     def save_checkpoint(self, checkpoint_path: Union[str, Path]):
         """ Saves the model weights to a checkpoint.
@@ -184,3 +180,39 @@ class EfficientDet(nn.Module):
     def get_trainable_params(self):
         """ Returns the number of trainable parameters. """
         return sum(p.numel() for p in self.model.parameters() if p.requires_grad)
+
+    def get_model_size_mb(self):
+        """Calcula el tamaño del modelo en memoria RAM (MB)."""
+        param_size = 0
+        for param in self.model.parameters():
+            param_size += param.nelement() * param.element_size()
+        buffer_size = 0
+        for buffer in self.model.buffers():
+            buffer_size += buffer.nelement() * buffer.element_size()
+        
+        size_all_mb = (param_size + buffer_size) / 1024**2
+        return size_all_mb
+
+    def get_total_params(self):
+        """Calcula el número total de parámetros del modelo."""
+        return sum(p.numel() for p in self.model.parameters())
+
+    def get_trainable_params_percentage(self):
+        """Calcula el porcentaje de parámetros entrenables."""
+        total_params = self.get_total_params()
+        trainable_params = self.get_trainable_params()
+        return (trainable_params / total_params) * 100
+
+    def get_model_info(self):
+        """Devuelve un diccionario con información detallada del modelo."""
+        return {
+            "architecture": self.architecture,
+            "num_classes": self.num_classes,
+            "img_size": self.img_size,
+            "is_training": self.is_training,
+            "total_params": self.get_total_params(),
+            "trainable_params": self.get_trainable_params(),
+            "trainable_params_percentage": round(self.get_trainable_params_percentage(), 2),
+            "model_size_GB": round(self.get_model_size_mb() / 1024, 2)
+        }
+        

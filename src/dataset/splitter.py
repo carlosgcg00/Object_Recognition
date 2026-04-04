@@ -3,6 +3,8 @@ import random
 from pathlib import Path
 from typing import Dict, List, Tuple
 from utils.file_utils import save_txt
+import pandas as pd
+
 
 def get_processed_videos_dict(processed_dir: Path, classes: List[str]) -> Dict[str, Dict[str, List[Path]]]:
     """
@@ -322,6 +324,77 @@ def generate_random_kfold_yolo(
         
     print(f"✅ Random/Unbalanced YOLO configuration files generated successfully in: {out_dir}")
 
+
+def get_experiment_splits_df(
+    data_dict, 
+    k_folds, 
+    train_videos_per_class, 
+    is_random=False
+    ):
+    
+    """
+    Generate a DataFrame with the assignment of videos to folds.
+    
+    Args:
+        data_dict (Dict): Dictionary with the dataset.
+        k_folds (int): Number of folds.
+        train_videos_per_class (int): Number of videos per class for training.
+        is_random (bool): If True, generates random splits.
+    
+    Returns:
+        pd.DataFrame: DataFrame with the assignment of videos to folds.
+    """
+
+    all_videos = []
+    test_videos = []
+    
+    for class_name, videos_dict in data_dict.items():
+        vids = sorted(list(videos_dict.keys()))
+        test_videos.append(vids[-1])
+        all_videos.extend(vids)
+    
+    # Create base DF with all videos
+    df = pd.DataFrame({'video': all_videos})
+    
+    # Replicate Fold logic
+    for i in range(k_folds):
+        fold_col = f'Fold_{i+1}'
+        df[fold_col] = 'Val' # Default
+        
+        # Mark Test (es igual en todos los folds)
+        df.loc[df['video'].isin(test_videos), fold_col] = 'Test'
+        
+        if not is_random:
+            # Balanced logic (Rotation by class)
+            for class_name, videos_dict in data_dict.items():
+                cv_vids = sorted(list(videos_dict.keys()))[:-1]
+                shift = i % len(cv_vids)
+                rotated = cv_vids[shift:] + cv_vids[:shift]
+                train_vids = rotated[:train_videos_per_class]
+                
+                df.loc[df['video'].isin(train_vids), fold_col] = 'Train'
+        else:
+            # Lógica Random (Global)
+            cv_videos_flat = []
+            for class_name, videos_dict in data_dict.items():
+                cv_videos_flat.extend([(class_name, v) for v in sorted(list(videos_dict.keys()))[:-1]])
+            
+            import random
+            rng = random.Random(42)
+            rng.shuffle(cv_videos_flat)
+            
+            total_cv = len(cv_videos_flat)
+            fold_size = total_cv // k_folds
+            val_start = i * fold_size
+            val_end = val_start + fold_size if i < k_folds - 1 else total_cv
+            
+            val_vids = [v[1] for v in cv_videos_flat[val_start:val_end]]
+            # Los que no son Test ni Val, son Train
+            df.loc[(~df['video'].isin(test_videos)) & (~df['video'].isin(val_vids)), fold_col] = 'Train'
+            df.loc[df['video'].isin(val_vids), fold_col] = 'Val'
+
+    return df.sort_values('video').reset_index(drop=True)
+    
 
 def create_yolo_yaml(
     output_path: Path, 

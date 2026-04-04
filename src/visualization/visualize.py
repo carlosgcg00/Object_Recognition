@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from typing import List, Dict, Union, Optional, Tuple
 import torch
+from tqdm import tqdm
+import pandas as pd
 
 
 def get_class_color(class_id: int) -> Tuple[int, int, int]:
@@ -53,8 +55,8 @@ def draw_raw_annotations(
         # Prepare and draw label text
         label = f"ID:{obj_id} CL:{cls_id} CF:{conf:.2f}"
         font = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale = 0.45
-        thickness = 1
+        font_scale =1
+        thickness = 2
         
         (label_w, label_h), _ = cv2.getTextSize(label, font, font_scale, thickness)
         
@@ -197,7 +199,7 @@ def plot_video_frames_grid(
     # Assuming start_frame is 1-based (like in the Ground Truth)
     cap.set(cv2.CAP_PROP_POS_FRAMES, max(0, start_frame - 1))
 
-    fig, axes = plt.subplots(1, n_frames, figsize=(5 * n_frames, 5), dpi=150)
+    fig, axes = plt.subplots(1, n_frames, figsize=(10 * n_frames, 10), dpi=150)
     
     # Handle the case where n_frames is 1 (axes is not an array)
     if n_frames == 1:
@@ -228,7 +230,7 @@ def plot_video_frames_grid(
     
     if save_path:
         Path(save_path).parent.mkdir(parents=True, exist_ok=True)
-        plt.savefig(str(save_path), dpi=150, bbox_inches='tight')
+        plt.savefig(str(save_path), format = 'pdf', dpi=150, bbox_inches='tight')
         
     plt.show()
     plt.close(fig) # Liberar memoria
@@ -292,6 +294,19 @@ def export_annotated_video(
 
 
 def save_evaluation_grid(img_tensor, gt_dict, pred_tensor, class_names, out_path, score_thresh=0.3):
+    """
+    Saves a grid visualization comparing ground truth and predicted bounding boxes.
+
+    Args:
+        img_tensor (torch.Tensor): Input image tensor (C, H, W).
+        gt_dict (dict): Ground truth annotations with 'bbox' and 'cls' keys.
+        pred_tensor (torch.Tensor): Predicted annotations with 'bbox' and 'cls' keys.
+        class_names (dict): Mapping of class IDs to names.
+        out_path (str): Path to save the output image.
+        score_thresh (float): Confidence threshold for predictions.
+    Returns:
+        None
+    """
     img_np = img_tensor.permute(1, 2, 0).cpu().numpy()
     mean = np.array([0.485, 0.456, 0.406])
     std = np.array([0.229, 0.224, 0.225])
@@ -337,8 +352,19 @@ def save_evaluation_grid(img_tensor, gt_dict, pred_tensor, class_names, out_path
     cv2.imwrite(str(out_path), img_np)
 
 def plot_training_curves(history: dict, output_dir: Path, epochs_TL: int, class_names: dict):
+    """
+    Plots training and validation loss curves.
+
+    Args:
+        history (dict): Dictionary containing training history.
+        output_dir (Path): Directory to save the plots.
+        epochs_TL (int): Number of epochs for transfer learning.
+        class_names (dict): Mapping of class IDs to names.
+    Returns:
+        None
+    """
     epochs = range(1, len(history['train_loss']) + 1)
-    fig, axs = plt.subplots(2, 2, figsize=(18, 12))
+    fig, axs = plt.subplots(2, 2, figsize=(18, 12), dpi=200)
     
     def add_transition_line(ax):
         ax.axvline(x=epochs_TL, color='gray', linestyle='--', linewidth=2, label='FT Start')
@@ -346,8 +372,10 @@ def plot_training_curves(history: dict, output_dir: Path, epochs_TL: int, class_
     # 1. Loss Breakdown
     axs[0, 0].plot(epochs, history['train_loss'], label='Total Loss', color='black', linewidth=2)
     axs[0, 0].plot(epochs, history['train_class_loss'], label='Class Loss', color='black', linestyle='--')
+    axs[0, 0].plot(epochs, history['train_box_loss'], label='Box Loss', color='black', linestyle='-.')
     axs[0, 0].plot(epochs, history['val_loss'], label='Validation Loss', color='red', linewidth=2)
     axs[0, 0].plot(epochs, history['val_class_loss'], label='Val Class Loss', color='red', linestyle='--')
+    axs[0, 0].plot(epochs, history['val_box_loss'], label='Val Box Loss', color='red', linestyle='-.')
     add_transition_line(axs[0, 0])
     axs[0, 0].set_title('Loss Components Breakdown')
     axs[0, 0].set_ylabel('Loss Value')
@@ -391,3 +419,173 @@ def plot_training_curves(history: dict, output_dir: Path, epochs_TL: int, class_
     plt.savefig(output_dir / 'training_dashboard.png', dpi=200)
     print(f"✅ Training dashboard saved to {output_dir / 'training_dashboard.png'}")
     plt.close(fig)
+    
+def predict_video_with_model(
+    model: torch.nn.Module,
+    video_path: Union[str, Path],
+    output_path: Union[str, Path],
+    class_names: Dict[int, str],
+    img_size: int = 512,
+    score_thresh: float = 0.50,
+    device: str = 'cuda'
+) -> None:
+    """
+    Processes a video frame by frame using the trained model, draws the predictions
+    and exports a new video in .mp4 format
+    
+    Args:
+        model (torch.nn.Module): The trained model.
+        video_path (Union[str, Path]): Path to the input video.
+        output_path (Union[str, Path]): Path to save the output video.
+        class_names (Dict[int, str]): Mapping of class IDs to names.
+        img_size (int): Size of the input images.
+        score_thresh (float): Confidence threshold for predictions.
+        device (str): Device to use for inference.
+    Returns:
+        None
+    """
+    video_path = Path(video_path)
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # 1. Ensure the model is in inference mode
+    model.eval()
+    model.switch_to_predict()
+    model.to(device)
+
+    # 2. Open the original video
+    cap = cv2.VideoCapture(str(video_path))
+    if not cap.isOpened():
+        print(f"Error: No se pudo abrir el vídeo {video_path}")
+        return
+
+    # Extract properties for the VideoWriter
+    orig_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    orig_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    writer = cv2.VideoWriter(str(output_path), fourcc, fps, (orig_w, orig_h))
+
+    # Normalization constants (same as Albumentations)
+    mean = np.array([0.485, 0.456, 0.406], dtype=np.float32)
+    std = np.array([0.229, 0.224, 0.225], dtype=np.float32)
+
+    print(f"🎥 Processing video: {video_path.name}")
+    
+    for _ in tqdm(range(total_frames), desc="Processing frames"):
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        # --- PREPROCESSING ---
+        # 1. BGR to RGB
+        img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        # 2. Resize to the size expected by the model (e.g., 512x512)
+        img_resized = cv2.resize(img_rgb, (img_size, img_size))
+        # 3. Scale to [0, 1] and normalize
+        img_normalized = (img_resized / 255.0 - mean) / std
+        # 4. Convert to Tensor [C, H, W], add batch [1, C, H, W] and move to GPU
+        img_tensor = torch.tensor(img_normalized).permute(2, 0, 1).unsqueeze(0).float().to(device)
+
+        # --- INFERENCE ---
+        with torch.no_grad():
+            detections = model(img_tensor)[0] # Get the first element of the batch
+
+        # --- POSTPROCESSING AND DRAWING ---
+        if detections is not None and len(detections) > 0:
+            preds = detections.cpu().numpy()
+            # Filter by confidence threshold
+            valid_preds = preds[preds[:, 4] > score_thresh]
+
+            for pred in valid_preds:
+                x_min_n, y_min_n, x_max_n, y_max_n, score, cls_id = pred
+                
+                # The coordinates are referenced to the size img_size (512x512)
+                # They must be rescaled to the actual size of the video (orig_w, orig_h)
+                x_min = int((x_min_n / img_size) * orig_w)
+                y_min = int((y_min_n / img_size) * orig_h)
+                x_max = int((x_max_n / img_size) * orig_w)
+                y_max = int((y_max_n / img_size) * orig_h)
+                
+                cls_id = int(cls_id)
+                # Extract name and color
+                name = class_names.get(cls_id, f"ID:{cls_id}")
+                color = get_class_color(cls_id * 10) # Your existing function
+                
+                label = f"{name} {score:.2f}"
+                
+                # 1. Draw Bounding Box
+                cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), color, 3)
+                
+                # 2. Draw text background
+                font = cv2.FONT_HERSHEY_SIMPLEX
+                (label_w, label_h), _ = cv2.getTextSize(label, font, 0.6, 2)
+                cv2.rectangle(frame, (x_min, y_min - label_h - 10), (x_min + label_w + 5, y_min), color, -1)
+                
+                # 3. Draw Text
+                cv2.putText(frame, label, (x_min + 2, y_min - 7), font, 0.6, (255, 255, 255), 2, cv2.LINE_AA)
+
+        writer.write(frame)
+
+    cap.release()
+    writer.release()
+    print(f"✅ Video saved successfully to: {output_path}")
+    
+    
+
+
+def plot_yolo_curves(csv_path: Path, output_dir: Path, epochs_tl: int):
+    """
+    Generates a 2x2 dashboard of training metrics from YOLO consolidated CSV.
+    
+    Args:
+        csv_path (Path): Path to the CSV file containing training history.
+        output_dir (Path): Directory to save the resulting plot.
+        epochs_tl (int): Number of epochs in the transfer learning phase (to mark transition).
+    Returns:
+        None
+    """
+    if not csv_path.exists(): return
+    
+    df = pd.read_csv(csv_path)
+    df.columns = [c.strip() for c in df.columns] # Ensure clean headers
+    epochs = df['epoch']
+    
+    fig, axs = plt.subplots(2, 2, figsize=(18, 12), dpi=150)
+    def add_tl_line(ax): ax.axvline(x=epochs_tl, color='gray', linestyle='--', alpha=0.7)
+
+    df['train/total_loss'] = df['train/box_loss'] + df['train/cls_loss']
+    df['val/total_loss'] = df['val/box_loss'] + df['val/cls_loss']
+
+    # Plot 1: Losses
+    axs[0, 0].plot(epochs, df['train/total_loss'], label='Train Total', color='black', linewidth=2)
+    axs[0, 0].plot(epochs, df['train/box_loss'], label='Train Box', color='black', linestyle='-.')
+    axs[0, 0].plot(epochs, df['train/cls_loss'], label='Train Class', color='black', linestyle='-.')
+    axs[0, 0].plot(epochs, df['val/total_loss'], label='Val Total', color='red', linewidth=2)
+    axs[0, 0].plot(epochs, df['val/box_loss'], label='Val Box', color='red', linestyle='-.')
+    axs[0, 0].plot(epochs, df['val/cls_loss'], label='Val Class', color='red', linestyle='-.')
+    add_tl_line(axs[0, 0])
+    axs[0, 0].set_title('Loss Breakdown'); axs[0, 0].legend(); axs[0, 0].grid(True, alpha=0.2)
+
+    # Plot 2: mAP
+    axs[0, 1].plot(epochs, df['metrics/mAP50(B)'], label='mAP50', color='green', marker='o', markersize=3)
+    axs[0, 1].plot(epochs, df['metrics/mAP50-95(B)'], label='mAP50-95', color='darkgreen')
+    add_tl_line(axs[0, 1])
+    axs[0, 1].set_title('Detection Performance'); axs[0, 1].legend(); axs[0, 1].grid(True, alpha=0.2)
+
+    # Plot 3: Learning Rate
+    axs[1, 0].plot(epochs, df['lr/pg0'], color='orange', label='LR pg0')
+    add_tl_line(axs[1, 0])
+    axs[1, 0].set_yscale('log'); axs[1, 0].set_title('Learning Rate'); axs[1, 0].grid(True, alpha=0.2)
+
+    # Plot 4: Metrics (Precision/Recall)
+    axs[1, 1].plot(epochs, df['metrics/precision(B)'], label='Precision', color='blue')
+    axs[1, 1].plot(epochs, df['metrics/recall(B)'], label='Recall', color='cyan')
+    add_tl_line(axs[1, 1])
+    axs[1, 1].set_title('Precision vs Recall'); axs[1, 1].legend(); axs[1, 1].grid(True, alpha=0.2)
+
+    plt.tight_layout()
+    plt.savefig(output_dir / 'yolo_training_curves.png')
+    plt.close()
