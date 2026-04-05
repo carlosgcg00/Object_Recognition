@@ -17,10 +17,12 @@ list_experiments = sorted([f for f in os.listdir(experiments_path) if os.path.is
 selected_models_yolo = config['selected_models_yolo']
 
 # Hyperparameters (igual que en EfficientDet)
-EPOCHS_TL, EPOCHS_FT = 10, 20
+EPOCHS_TL = 10
+EPOCHS_FT = 20
 BATCH_SIZE = 16
 OPTIMIZER = 'AdamW'
-LR_TL, LR_FT = 1e-3, 1e-4
+LR_TL = 1e-3
+LR_FT = 1e-4
 
 for id_model, (MODEL_NAME, model_cfg) in enumerate(selected_models_yolo.items()):
     IMG_SIZE = model_cfg['img_size']

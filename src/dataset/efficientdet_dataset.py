@@ -64,7 +64,7 @@ class EfficientDetDataset(Dataset):
                         h = abs(h)
                         if w <= 0.001 or h <= 0.001:
                             continue
-                        
+                        # From YOLO format (x_center, y_center, width, height) to Pascal VOC format (x_min, y_min, x_max, y_max)
                         x_min = max(0.0, min(1.0, x_c - (w / 2.0)))
                         y_min = max(0.0, min(1.0, y_c - (h / 2.0)))
                         x_max = max(0.0, min(1.0, x_c + (w / 2.0)))

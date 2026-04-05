@@ -484,8 +484,8 @@ def plot_training_curves(history: dict, output_dir: Path, epochs_TL: int, class_
     axs[1, 1].grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig(output_dir / 'training_dashboard.png', dpi=200)
-    print(f"✅ Training dashboard saved to {output_dir / 'training_dashboard.png'}")
+    plt.savefig(output_dir / 'training_dashboard.pdf', format = 'pdf', dpi=150, bbox_inches='tight')
+    print(f"✅ Training dashboard saved to {output_dir / 'training_dashboard.pdf'}")
     plt.close(fig)
     
 def predict_video_with_model(
@@ -655,5 +655,5 @@ def plot_yolo_curves(csv_path: Path, output_dir: Path, epochs_tl: int):
     axs[1, 1].set_title('Precision vs Recall'); axs[1, 1].legend(); axs[1, 1].grid(True, alpha=0.2)
 
     plt.tight_layout()
-    plt.savefig(output_dir / 'yolo_training_curves.png')
+    plt.savefig(output_dir / 'yolo_training_curves.pdf', format = 'pdf', dpi=150, bbox_inches='tight')
     plt.close()

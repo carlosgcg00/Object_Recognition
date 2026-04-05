@@ -212,7 +212,8 @@ class EfficientDet(nn.Module):
             "is_training": self.is_training,
             "total_params": self.get_total_params(),
             "trainable_params": self.get_trainable_params(),
-            "trainable_params_percentage": round(self.get_trainable_params_percentage(), 2),
-            "model_size_GB": round(self.get_model_size_mb() / 1024, 2)
+            "trainable_params_percentage": round(self.get_trainable_params_percentage(), 3),
+            "model_size_GB": round(self.get_model_size_mb() / 1024, 3),
+            "model_size_MB": round(self.get_model_size_mb(), 3)
         }
         

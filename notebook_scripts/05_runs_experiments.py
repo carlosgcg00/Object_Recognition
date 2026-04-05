@@ -69,7 +69,7 @@ for id_model, (SELECTED_MODEL, model_config) in enumerate(list(selected_models_e
         )
     val_transforms = get_transforms('val', IMG_SIZE)
 
-    for experiment in list_experiments:
+    for idx_experiment, experiment in enumerate(list_experiments):
         experiment_path = experiments_path / experiment
         
         # Buscar archivos yaml
@@ -77,65 +77,65 @@ for id_model, (SELECTED_MODEL, model_config) in enumerate(list(selected_models_e
         
         for fold_index, fold_config_yaml_file in enumerate(fold_config_yaml_files):
 
-            # print(f"\n{'='*80}")
-            # print(f"Model: {SELECTED_MODEL}")
-            # print(f"Experiment: {experiment}")
-            # print(f"Fold: {fold_index + 1}/{len(fold_config_yaml_files)}")
-            # print(f"{'='*80}\n")
-            # fold_name = fold_config_yaml_file.stem
-            # OUTPUT_DIR = PROJECT_ROOT / 'runs' / SELECTED_MODEL / experiment / fold_name
-            # OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+            print(f"\n{'='*80}")
+            print(f"Model: {SELECTED_MODEL}")
+            print(f"Experiment: {experiment}")
+            print(f"Fold: {fold_index + 1}/{len(fold_config_yaml_files)}")
+            print(f"{'='*80}\n")
+            fold_name = fold_config_yaml_file.stem
+            OUTPUT_DIR = PROJECT_ROOT / 'runs' / SELECTED_MODEL / experiment / fold_name
+            OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
             
             
-            # train_efficientdet_pipeline(
-            #     architecture=SELECTED_MODEL,
-            #     img_size=IMG_SIZE,
-            #     epochs_tl=EPOCHS_TL,
-            #     epochs_ft=EPOCHS_FT,
-            #     batch_size=BATCH_SIZE,
-            #     lr_tl=LR_TL,
-            #     lr_ft=LR_FT,
-            #     optimizer_str=OPTIMIZER,
-            #     scheduler_str=SCHEDULER,
-            #     early_stop_patience=EARLY_STOP_PATIENCE,
-            #     warmup_epochs=WARMUP_EPOCHS,
-            #     weight_decay=WEIGHT_DECAY,
-            #     dropout_rate=DROPOUT,
-            #     train_transforms=train_transforms,
-            #     val_transforms=val_transforms,
-            #     mosaic_prob=MOSAIC_PROB,
-            #     output_dir=OUTPUT_DIR,
-            #     yaml_path=fold_config_yaml_file,
-            #     device=DEVICE
-            # )
+            train_efficientdet_pipeline(
+                architecture=SELECTED_MODEL,
+                img_size=IMG_SIZE,
+                epochs_tl=EPOCHS_TL,
+                epochs_ft=EPOCHS_FT,
+                batch_size=BATCH_SIZE,
+                lr_tl=LR_TL,
+                lr_ft=LR_FT,
+                optimizer_str=OPTIMIZER,
+                scheduler_str=SCHEDULER,
+                early_stop_patience=EARLY_STOP_PATIENCE,
+                warmup_epochs=WARMUP_EPOCHS,
+                weight_decay=WEIGHT_DECAY,
+                dropout_rate=DROPOUT,
+                train_transforms=train_transforms,
+                val_transforms=val_transforms,
+                mosaic_prob=MOSAIC_PROB,
+                output_dir=OUTPUT_DIR,
+                yaml_path=fold_config_yaml_file,
+                device=DEVICE
+            )
 
-            if fold_index == 0 and id_model == 0:
-                # fold_name = fold_config_yaml_file.stem
-                # OUTPUT_DIR = PROJECT_ROOT / 'runs' / SELECTED_MODEL / experiment / f'no_augs_{fold_name}'
-                # OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+            if fold_index == 0 and SELECTED_MODEL == 'efficientdet_d2' and idx_experiment == 0:
+                fold_name = fold_config_yaml_file.stem
+                OUTPUT_DIR = PROJECT_ROOT / 'runs' / SELECTED_MODEL / experiment / f'no_augs_{fold_name}'
+                OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
                 
                 
-                # train_efficientdet_pipeline(
-                #     architecture=SELECTED_MODEL,
-                #     img_size=IMG_SIZE,
-                #     epochs_tl=EPOCHS_TL,
-                #     epochs_ft=EPOCHS_FT,
-                #     batch_size=BATCH_SIZE,
-                #     lr_tl=LR_TL,
-                #     lr_ft=LR_FT,
-                #     optimizer_str=OPTIMIZER,
-                #     scheduler_str=SCHEDULER,
-                #     early_stop_patience=EARLY_STOP_PATIENCE,
-                #     warmup_epochs=WARMUP_EPOCHS,
-                #     weight_decay=WEIGHT_DECAY,
-                #     dropout_rate=DROPOUT,
-                #     train_transforms=train_transforms_no_augs,
-                #     val_transforms=val_transforms,
-                #     mosaic_prob=0.0,
-                #     output_dir=OUTPUT_DIR,
-                #     yaml_path=fold_config_yaml_file,
-                #     device=DEVICE
-                # )
+                train_efficientdet_pipeline(
+                    architecture=SELECTED_MODEL,
+                    img_size=IMG_SIZE,
+                    epochs_tl=EPOCHS_TL,
+                    epochs_ft=EPOCHS_FT,
+                    batch_size=BATCH_SIZE,
+                    lr_tl=LR_TL,
+                    lr_ft=LR_FT,
+                    optimizer_str=OPTIMIZER,
+                    scheduler_str=SCHEDULER,
+                    early_stop_patience=EARLY_STOP_PATIENCE,
+                    warmup_epochs=WARMUP_EPOCHS,
+                    weight_decay=WEIGHT_DECAY,
+                    dropout_rate=DROPOUT,
+                    train_transforms=train_transforms_no_augs,
+                    val_transforms=val_transforms,
+                    mosaic_prob=0.0,
+                    output_dir=OUTPUT_DIR,
+                    yaml_path=fold_config_yaml_file,
+                    device=DEVICE
+                )
                 
                 fold_name = fold_config_yaml_file.stem
                 OUTPUT_DIR = PROJECT_ROOT / 'runs' / SELECTED_MODEL / experiment / f'augs_{fold_name}_without_mosaic'

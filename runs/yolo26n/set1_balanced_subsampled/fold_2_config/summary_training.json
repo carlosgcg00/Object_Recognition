@@ -1,7 +1,10 @@
 {
     "model_name": "yolo26n",
     "model_size_mb": 5.11,
-    "fps": 238.5,
+    "model_size_gb": 0.005,
+    "model_num_params": 2375421,
+    "model_num_trainable_params": 0,
+    "fps": 238.0,
     "metrics": {
         "mAP50": 0.6822321897743221,
         "mAP50-95": 0.39075002343900567

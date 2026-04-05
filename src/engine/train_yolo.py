@@ -121,6 +121,9 @@ def train_yolo_pipeline(
     summary = {
         "model_name": architecture,
         "model_size_mb": round(os.path.getsize(final_out / 'best.pt') / (1024**2), 2),
+        "model_size_gb": round(os.path.getsize(final_out / 'best.pt') / (1024**3), 4),
+        "model_num_params": sum(p.numel() for p in model.parameters()),
+        "model_num_trainable_params": sum(p.numel() for p in model.parameters() if p.requires_grad),
         "fps": round(1/avg_inf, 1),
         "metrics": {
             "mAP50": float(results_ft.results_dict.get('metrics/mAP50(B)', 0)),
