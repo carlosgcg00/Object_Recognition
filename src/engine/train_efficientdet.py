@@ -1,4 +1,4 @@
-# src/engine/train_pipeline.py
+# src/engine/train_efficientdet.py
 import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader

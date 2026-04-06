@@ -10,7 +10,7 @@ from dataset.efficientdet_dataset import EfficientDetDataset
 from models.efficientdet import EfficientDet
 from utils.data_augmentations import get_transforms
 from utils.file_utils import read_yaml
-from engine.train_pipeline import train_efficientdet_pipeline
+from engine.train_efficientdet import train_efficientdet_pipeline
 from utils.data_augmentations import get_transforms
 
 
