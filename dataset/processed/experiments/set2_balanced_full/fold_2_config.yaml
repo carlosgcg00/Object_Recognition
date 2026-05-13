@@ -1,0 +1,6 @@
+train: /home/cgonzalez/Object_Recognition/dataset/processed/experiments/set2_balanced_full/fold_2_train.txt
+val: /home/cgonzalez/Object_Recognition/dataset/processed/experiments/set2_balanced_full/fold_2_val.txt
+test: /home/cgonzalez/Object_Recognition/dataset/processed/experiments/set2_balanced_full/test.txt
+
+nc: 3
+names: ['horse', 'penguin', 'pig']

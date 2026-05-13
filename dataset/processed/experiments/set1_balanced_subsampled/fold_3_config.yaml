@@ -1,0 +1,6 @@
+train: /home/cgonzalez/Object_Recognition/dataset/processed/experiments/set1_balanced_subsampled/fold_3_train.txt
+val: /home/cgonzalez/Object_Recognition/dataset/processed/experiments/set1_balanced_subsampled/fold_3_val.txt
+test: /home/cgonzalez/Object_Recognition/dataset/processed/experiments/set1_balanced_subsampled/test.txt
+
+nc: 3
+names: ['horse', 'penguin', 'pig']

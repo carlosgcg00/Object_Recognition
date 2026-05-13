@@ -8,7 +8,7 @@ wheels/
 
 # Virtual environments
 .venv
-dataset
+dataset/raw
 models
 
 # Ficheros .mp4
