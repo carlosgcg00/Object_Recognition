@@ -25,7 +25,6 @@ tracking/
 *.pt
 *.pth
 
-runs/
 notebook_scripts/docs/videos/
 *.mp4
 *.pt

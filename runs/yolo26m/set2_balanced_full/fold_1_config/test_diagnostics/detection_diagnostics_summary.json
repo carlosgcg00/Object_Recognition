@@ -1,0 +1,101 @@
+{
+    "iou_thresh": 0.5,
+    "score_thresh": 0.5,
+    "num_images": 372,
+    "output_dir": "/home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_1_config/test_diagnostics",
+    "global_metrics": {
+        "tp": 3041,
+        "fp": 138,
+        "fn": 851,
+        "precision_micro": 0.956590122680088,
+        "recall_micro": 0.7813463514902363,
+        "f1_micro": 0.8601329373497384,
+        "precision_macro": 0.9639920355286371,
+        "recall_macro": 0.77302250240687,
+        "f1_macro": 0.8553006090328851
+    },
+    "per_class_metrics": [
+        {
+            "class_id": 0,
+            "class_name": "horse",
+            "tp": 1671,
+            "fp": 101,
+            "fn": 343,
+            "support_gt": 2014,
+            "support_pred": 1772,
+            "precision": 0.9430022573363431,
+            "recall": 0.8296921549155909,
+            "f1": 0.8827258320126784
+        },
+        {
+            "class_id": 1,
+            "class_name": "penguin",
+            "tp": 668,
+            "fp": 5,
+            "fn": 125,
+            "support_gt": 793,
+            "support_pred": 673,
+            "precision": 0.9925705794947994,
+            "recall": 0.8423707440100883,
+            "f1": 0.9113233287858117
+        },
+        {
+            "class_id": 2,
+            "class_name": "pig",
+            "tp": 702,
+            "fp": 32,
+            "fn": 383,
+            "support_gt": 1085,
+            "support_pred": 734,
+            "precision": 0.9564032697547684,
+            "recall": 0.6470046082949309,
+            "f1": 0.7718526663001649
+        }
+    ],
+    "confusion_matrix_counts": [
+        [
+            0,
+            101,
+            5,
+            32
+        ],
+        [
+            343,
+            1671,
+            0,
+            0
+        ],
+        [
+            125,
+            0,
+            668,
+            0
+        ],
+        [
+            383,
+            0,
+            0,
+            702
+        ]
+    ],
+    "confusion_matrix_labels": [
+        "background",
+        "horse",
+        "penguin",
+        "pig"
+    ],
+    "files": {
+        "confusion_matrix_counts_csv": "/home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_1_config/test_diagnostics/confusion_matrix_counts.csv",
+        "confusion_matrix_normalized_csv": "/home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_1_config/test_diagnostics/confusion_matrix_normalized_by_gt.csv",
+        "confusion_matrix_counts_pdf": "/home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_1_config/test_diagnostics/confusion_matrix_counts.pdf",
+        "confusion_matrix_counts_jpg": "/home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_1_config/test_diagnostics/confusion_matrix_counts.jpg",
+        "confusion_matrix_normalized_pdf": "/home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_1_config/test_diagnostics/confusion_matrix_normalized_by_gt.pdf",
+        "confusion_matrix_normalized_jpg": "/home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_1_config/test_diagnostics/confusion_matrix_normalized_by_gt.jpg",
+        "per_class_metrics_csv": "/home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_1_config/test_diagnostics/precision_recall_f1_per_class.csv",
+        "global_metrics_json": "/home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_1_config/test_diagnostics/precision_recall_f1_global.json",
+        "pr_curve_micro_csv": "/home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_1_config/test_diagnostics/pr_curve_micro.csv",
+        "pr_curve_per_class_csv": "/home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_1_config/test_diagnostics/pr_curve_per_class.csv",
+        "pr_curves_pdf": "/home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_1_config/test_diagnostics/precision_recall_curves.pdf",
+        "precision_recall_f1_vs_threshold_pdf": "/home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_1_config/test_diagnostics/precision_recall_f1_vs_score_threshold.pdf"
+    }
+}

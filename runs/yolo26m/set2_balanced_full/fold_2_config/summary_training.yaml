@@ -1,0 +1,475 @@
+best_val_map50_FT: 0.9016705069219118
+best_val_map50_TL: 0.8359779091362548
+epochs_ft: 20
+epochs_tl: 10
+history:
+  lr:
+  - 0.000195833
+  - 0.000356646
+  - 0.000477858
+  - 0.000559471
+  - 0.000601483
+  - 0.000505
+  - 0.000406
+  - 0.000307
+  - 0.000208
+  - 0.000109
+  - 0.0001
+  - 9.93906e-05
+  - 9.75773e-05
+  - 9.46048e-05
+  - 9.05463e-05
+  - 8.55018e-05
+  - 7.95954e-05
+  - 7.29725e-05
+  - 6.57963e-05
+  - 5.82435e-05
+  - 5.05e-05
+  - 4.27565e-05
+  - 3.52037e-05
+  train_box_loss:
+  - 1.39132
+  - 1.27763
+  - 1.20036
+  - 1.15592
+  - 1.11589
+  - 1.10534
+  - 1.09126
+  - 1.08326
+  - 1.03899
+  - 1.03561
+  - 1.30298
+  - 1.09702
+  - 1.0434
+  - 0.99716
+  - 0.95929
+  - 0.94859
+  - 0.91422
+  - 0.88905
+  - 0.87009
+  - 0.85395
+  - 0.80788
+  - 0.78844
+  - 0.78964
+  train_class_loss:
+  - 1.80536
+  - 1.02268
+  - 0.8953
+  - 0.82928
+  - 0.79292
+  - 0.75529
+  - 0.73808
+  - 0.71363
+  - 0.68399
+  - 0.68584
+  - 1.60638
+  - 0.73903
+  - 0.69212
+  - 0.64745
+  - 0.60659
+  - 0.58445
+  - 0.56246
+  - 0.55385
+  - 0.52245
+  - 0.51899
+  - 0.45193
+  - 0.42895
+  - 0.42839
+  train_dfl_loss:
+  - 0.00778
+  - 0.00698
+  - 0.00661
+  - 0.00631
+  - 0.00602
+  - 0.00607
+  - 0.00594
+  - 0.00592
+  - 0.0056
+  - 0.00559
+  - 0.00685
+  - 0.00509
+  - 0.0049
+  - 0.00466
+  - 0.00451
+  - 0.00435
+  - 0.00422
+  - 0.00412
+  - 0.00393
+  - 0.00389
+  - 0.00416
+  - 0.00397
+  - 0.00397
+  train_loss:
+  - 3.2044599999999996
+  - 2.30729
+  - 2.10227
+  - 1.9915100000000001
+  - 1.9148299999999998
+  - 1.8667
+  - 1.8352799999999998
+  - 1.8028099999999998
+  - 1.7285800000000002
+  - 1.72704
+  - 2.91621
+  - 1.8411400000000002
+  - 1.74042
+  - 1.6492700000000002
+  - 1.57039
+  - 1.5373900000000003
+  - 1.4808999999999999
+  - 1.4470199999999998
+  - 1.3964699999999999
+  - 1.3768299999999998
+  - 1.26397
+  - 1.22136
+  - 1.222
+  val_box_loss:
+  - 1.32873
+  - 1.34493
+  - 1.31859
+  - 1.35647
+  - 1.27704
+  - 1.27196
+  - 1.32064
+  - 1.28472
+  - 1.2814
+  - 1.27522
+  - 1.28619
+  - 1.32956
+  - 1.32973
+  - 1.27618
+  - 1.2863
+  - 1.37055
+  - 1.2795
+  - 1.29025
+  - 1.29023
+  - 1.32125
+  - 1.34392
+  - 1.34054
+  - 1.32993
+  val_class_loss:
+  - 1.56037
+  - 1.15904
+  - 1.02814
+  - 0.99572
+  - 1.0129
+  - 1.01525
+  - 0.9635
+  - 0.96537
+  - 0.94447
+  - 0.94
+  - 1.25326
+  - 0.94387
+  - 0.94074
+  - 0.90046
+  - 0.89415
+  - 0.91982
+  - 0.81639
+  - 0.79345
+  - 0.80677
+  - 0.77671
+  - 0.76106
+  - 0.78947
+  - 0.77806
+  val_dfl_loss:
+  - 0.0069
+  - 0.00698
+  - 0.00696
+  - 0.00713
+  - 0.00667
+  - 0.00671
+  - 0.00688
+  - 0.00673
+  - 0.00668
+  - 0.00664
+  - 0.00677
+  - 0.00701
+  - 0.00704
+  - 0.00666
+  - 0.00674
+  - 0.00729
+  - 0.00667
+  - 0.00678
+  - 0.00673
+  - 0.00698
+  - 0.00707
+  - 0.00705
+  - 0.00697
+  val_f1:
+  - 0.5386700624968129
+  - 0.6638999564399763
+  - 0.7265550974678621
+  - 0.7286522212784274
+  - 0.7133553731871348
+  - 0.7182878547882072
+  - 0.7464404445948125
+  - 0.7323391131234402
+  - 0.7370078499042926
+  - 0.7368561053730452
+  - 0.6819330466173541
+  - 0.7517227239726881
+  - 0.7511689394890246
+  - 0.7604485737514045
+  - 0.7646898730760845
+  - 0.7587101227689288
+  - 0.7903178013985199
+  - 0.8066315280532682
+  - 0.7944925228287125
+  - 0.8146060387251975
+  - 0.8238338569644995
+  - 0.8089588647067177
+  - 0.8043494915342025
+  val_loss:
+  - 2.896
+  - 2.51095
+  - 2.35369
+  - 2.3593200000000003
+  - 2.29661
+  - 2.29392
+  - 2.29102
+  - 2.2568200000000003
+  - 2.23255
+  - 2.22186
+  - 2.54622
+  - 2.2804400000000005
+  - 2.27751
+  - 2.1833
+  - 2.18719
+  - 2.2976599999999996
+  - 2.10256
+  - 2.09048
+  - 2.10373
+  - 2.10494
+  - 2.11205
+  - 2.13706
+  - 2.11496
+  val_map:
+  - 0.37653
+  - 0.44155
+  - 0.47413
+  - 0.4611
+  - 0.46861
+  - 0.47086
+  - 0.47273
+  - 0.484
+  - 0.50032
+  - 0.4848
+  - 0.50039
+  - 0.53072
+  - 0.51047
+  - 0.53042
+  - 0.55427
+  - 0.51325
+  - 0.5584
+  - 0.56231
+  - 0.56109
+  - 0.55989
+  - 0.54495
+  - 0.54463
+  - 0.53846
+  val_map50:
+  - 0.61379
+  - 0.7531
+  - 0.80835
+  - 0.81349
+  - 0.80453
+  - 0.80245
+  - 0.82401
+  - 0.82724
+  - 0.83595
+  - 0.82433
+  - 0.81397
+  - 0.87158
+  - 0.87264
+  - 0.86992
+  - 0.88556
+  - 0.87103
+  - 0.89376
+  - 0.90144
+  - 0.89942
+  - 0.90802
+  - 0.899
+  - 0.89763
+  - 0.89081
+  val_precision:
+  - 0.67269
+  - 0.66406
+  - 0.72328
+  - 0.73104
+  - 0.73437
+  - 0.72446
+  - 0.74912
+  - 0.72496
+  - 0.73299
+  - 0.74571
+  - 0.76144
+  - 0.78765
+  - 0.75603
+  - 0.7919
+  - 0.78516
+  - 0.76682
+  - 0.82662
+  - 0.83016
+  - 0.80448
+  - 0.83024
+  - 0.84466
+  - 0.83257
+  - 0.82625
+  val_recall:
+  - 0.44918
+  - 0.66374
+  - 0.72986
+  - 0.72628
+  - 0.69351
+  - 0.71222
+  - 0.74378
+  - 0.73987
+  - 0.74107
+  - 0.72821
+  - 0.61746
+  - 0.71893
+  - 0.74637
+  - 0.7314
+  - 0.74526
+  - 0.75077
+  - 0.75707
+  - 0.7844
+  - 0.78475
+  - 0.79955
+  - 0.80401
+  - 0.78665
+  - 0.78358
+inference_stats:
+  batch_size: 1
+  fps_batch_based: !!python/object/apply:numpy._core.multiarray.scalar
+  - &id001 !!python/object/apply:numpy.dtype
+    args:
+    - f8
+    - false
+    - true
+    state: !!python/tuple
+    - 3
+    - <
+    - null
+    - null
+    - null
+    - -1
+    - -1
+    - 0
+  - !!binary |
+    YxOEorEDa0A=
+  mean_batch_time_sec: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KNAn8uzzcj8=
+  mean_img_time_sec: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KNAn8uzzcj8=
+  std_batch_time_sec: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    yKxyEiHW8T4=
+metadata:
+  device: cuda
+  duration: 0:03:54
+model_info_ft:
+  frozen_params: 0
+  total_params: 21777514
+  trainable_params: 21777514
+  trainable_percentage: 100.0
+model_info_tl:
+  frozen_params: 3846464
+  total_params: 21896248
+  trainable_params: 18049784
+  trainable_percentage: 82.43
+model_name: yolo26m
+model_size_mb: 41.96
+results_test:
+  f1: 0.8873369726272036
+  map: 0.6593879514661657
+  map_50: 0.9327570090166016
+  precision: 0.9174420833795391
+  recall: 0.8591448476041444
+test_diagnostics:
+  confusion_matrix_counts:
+  - - 0
+    - 22
+    - 7
+    - 36
+  - - 573
+    - 1440
+    - 1
+    - 0
+  - - 115
+    - 0
+    - 678
+    - 0
+  - - 314
+    - 0
+    - 0
+    - 771
+  confusion_matrix_labels:
+  - background
+  - horse
+  - penguin
+  - pig
+  files:
+    confusion_matrix_counts_csv: /home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_2_config/test_diagnostics/confusion_matrix_counts.csv
+    confusion_matrix_counts_jpg: /home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_2_config/test_diagnostics/confusion_matrix_counts.jpg
+    confusion_matrix_counts_pdf: /home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_2_config/test_diagnostics/confusion_matrix_counts.pdf
+    confusion_matrix_normalized_csv: /home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_2_config/test_diagnostics/confusion_matrix_normalized_by_gt.csv
+    confusion_matrix_normalized_jpg: /home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_2_config/test_diagnostics/confusion_matrix_normalized_by_gt.jpg
+    confusion_matrix_normalized_pdf: /home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_2_config/test_diagnostics/confusion_matrix_normalized_by_gt.pdf
+    global_metrics_json: /home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_2_config/test_diagnostics/precision_recall_f1_global.json
+    per_class_metrics_csv: /home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_2_config/test_diagnostics/precision_recall_f1_per_class.csv
+    pr_curve_micro_csv: /home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_2_config/test_diagnostics/pr_curve_micro.csv
+    pr_curve_per_class_csv: /home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_2_config/test_diagnostics/pr_curve_per_class.csv
+    pr_curves_pdf: /home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_2_config/test_diagnostics/precision_recall_curves.pdf
+    precision_recall_f1_vs_threshold_pdf: /home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_2_config/test_diagnostics/precision_recall_f1_vs_score_threshold.pdf
+  global_metrics:
+    f1_macro: 0.8534616068930739
+    f1_micro: 0.8438732291514532
+    fn: 1003
+    fp: 66
+    precision_macro: 0.9762268824584509
+    precision_micro: 0.9776649746192894
+    recall_macro: 0.7601917325289994
+    recall_micro: 0.7422918807810894
+    tp: 2889
+  iou_thresh: 0.5
+  num_images: 372
+  output_dir: /home/cgonzalez/Object_Recognition/runs/yolo26m/set2_balanced_full/fold_2_config/test_diagnostics
+  per_class_metrics:
+  - class_id: 0
+    class_name: horse
+    f1: 0.8285385500575374
+    fn: 574
+    fp: 22
+    precision: 0.9849521203830369
+    recall: 0.7149950347567031
+    support_gt: 2014
+    support_pred: 1462
+    tp: 1440
+  - class_id: 1
+    class_name: penguin
+    f1: 0.9168356997971602
+    fn: 115
+    fp: 8
+    precision: 0.9883381924198251
+    recall: 0.8549810844892812
+    support_gt: 793
+    support_pred: 686
+    tp: 678
+  - class_id: 2
+    class_name: pig
+    f1: 0.8150105708245244
+    fn: 314
+    fp: 36
+    precision: 0.9553903345724907
+    recall: 0.7105990783410139
+    support_gt: 1085
+    support_pred: 807
+    tp: 771
+  score_thresh: 0.5
+test_mAP50: 0.9327570090166016

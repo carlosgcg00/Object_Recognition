@@ -1,0 +1,419 @@
+best_val_map50_FT: 0.8278135370898835
+best_val_map50_TL: 0.7229525082321606
+epochs_ft: 20
+epochs_tl: 10
+history:
+  lr:
+  - 0.000195556
+  - 0.000356396
+  - 0.000477636
+  - 0.000559276
+  - 0.000601316
+  - 0.000505
+  - 0.000406
+  - 0.000307
+  - 0.000208
+  - 0.000109
+  - 0.0001
+  - 9.93906e-05
+  - 9.75773e-05
+  - 9.46048e-05
+  - 9.05463e-05
+  - 8.55018e-05
+  - 7.95954e-05
+  - 7.29725e-05
+  - 6.57963e-05
+  train_box_loss:
+  - 1.33101
+  - 1.2166
+  - 1.16851
+  - 1.16644
+  - 1.13573
+  - 1.11791
+  - 1.09182
+  - 1.06649
+  - 1.06245
+  - 1.04974
+  - 1.30913
+  - 1.09042
+  - 1.04863
+  - 0.99068
+  - 0.96123
+  - 0.93287
+  - 0.90429
+  - 0.88561
+  - 0.86436
+  train_class_loss:
+  - 1.82755
+  - 1.03782
+  - 0.92612
+  - 0.87305
+  - 0.81825
+  - 0.77203
+  - 0.75376
+  - 0.72397
+  - 0.71967
+  - 0.69094
+  - 1.60621
+  - 0.77119
+  - 0.70747
+  - 0.65175
+  - 0.61549
+  - 0.59236
+  - 0.57107
+  - 0.55561
+  - 0.53085
+  train_dfl_loss:
+  - 0.00722
+  - 0.00671
+  - 0.00635
+  - 0.00646
+  - 0.00617
+  - 0.00596
+  - 0.00603
+  - 0.00581
+  - 0.00566
+  - 0.00559
+  - 0.00679
+  - 0.00514
+  - 0.0048
+  - 0.00458
+  - 0.00442
+  - 0.0043
+  - 0.00422
+  - 0.00422
+  - 0.0038
+  train_loss:
+  - 3.16578
+  - 2.2611299999999996
+  - 2.10098
+  - 2.04595
+  - 1.96015
+  - 1.8959
+  - 1.85161
+  - 1.79627
+  - 1.78778
+  - 1.7462699999999998
+  - 2.9221299999999997
+  - 1.86675
+  - 1.7609
+  - 1.64701
+  - 1.58114
+  - 1.52953
+  - 1.47958
+  - 1.4454399999999998
+  - 1.39901
+  val_box_loss:
+  - 1.38526
+  - 1.35355
+  - 1.31926
+  - 1.37633
+  - 1.30532
+  - 1.30171
+  - 1.39076
+  - 1.35557
+  - 1.40117
+  - 1.31135
+  - 1.30608
+  - 1.3983
+  - 1.40644
+  - 1.29943
+  - 1.3531
+  - 1.37384
+  - 1.35073
+  - 1.35654
+  - 1.34415
+  val_class_loss:
+  - 1.75308
+  - 1.49121
+  - 1.28909
+  - 1.23557
+  - 1.22148
+  - 1.23487
+  - 1.13251
+  - 1.1311
+  - 1.09545
+  - 1.05445
+  - 1.12516
+  - 1.06452
+  - 0.88445
+  - 0.92881
+  - 0.95268
+  - 0.94654
+  - 0.97437
+  - 0.98136
+  - 0.89634
+  val_dfl_loss:
+  - 0.00699
+  - 0.00698
+  - 0.0067
+  - 0.00691
+  - 0.00659
+  - 0.0066
+  - 0.00714
+  - 0.00694
+  - 0.00713
+  - 0.00665
+  - 0.00662
+  - 0.00727
+  - 0.00738
+  - 0.00672
+  - 0.00704
+  - 0.00712
+  - 0.00701
+  - 0.0071
+  - 0.007
+  val_f1:
+  - 0.4016280220396976
+  - 0.541876956221249
+  - 0.5708098011578874
+  - 0.568010442848249
+  - 0.5950670776585125
+  - 0.5994667793823744
+  - 0.631028325715727
+  - 0.6297730972666353
+  - 0.6442783135051702
+  - 0.652803339857347
+  - 0.654208721673343
+  - 0.6542587633999442
+  - 0.7425132800078464
+  - 0.7370912666300202
+  - 0.7261608523173727
+  - 0.7249290125884873
+  - 0.7223665315521604
+  - 0.7283779649817397
+  - 0.7613872967158163
+  val_loss:
+  - 3.14533
+  - 2.85174
+  - 2.61505
+  - 2.6188100000000003
+  - 2.53339
+  - 2.54318
+  - 2.5304100000000003
+  - 2.4936100000000003
+  - 2.50375
+  - 2.37245
+  - 2.4378599999999997
+  - 2.47009
+  - 2.29827
+  - 2.23496
+  - 2.31282
+  - 2.3275
+  - 2.33211
+  - 2.345
+  - 2.24749
+  val_map:
+  - 0.22724
+  - 0.33639
+  - 0.37569
+  - 0.35599
+  - 0.38748
+  - 0.41304
+  - 0.41227
+  - 0.4228
+  - 0.42302
+  - 0.44086
+  - 0.44855
+  - 0.43064
+  - 0.491
+  - 0.52342
+  - 0.49967
+  - 0.495
+  - 0.50254
+  - 0.50549
+  - 0.51807
+  val_map50:
+  - 0.37348
+  - 0.57328
+  - 0.62527
+  - 0.60742
+  - 0.63409
+  - 0.66738
+  - 0.69165
+  - 0.70343
+  - 0.715
+  - 0.72269
+  - 0.71781
+  - 0.71129
+  - 0.8028
+  - 0.82804
+  - 0.81574
+  - 0.81661
+  - 0.81473
+  - 0.82906
+  - 0.84375
+  val_precision:
+  - 0.4217
+  - 0.58537
+  - 0.57377
+  - 0.56331
+  - 0.62293
+  - 0.66153
+  - 0.68646
+  - 0.68421
+  - 0.68149
+  - 0.70918
+  - 0.693
+  - 0.71058
+  - 0.77014
+  - 0.78751
+  - 0.77481
+  - 0.76863
+  - 0.77442
+  - 0.77018
+  - 0.79267
+  val_recall:
+  - 0.38338
+  - 0.5044
+  - 0.56788
+  - 0.57279
+  - 0.56959
+  - 0.54805
+  - 0.58388
+  - 0.58336
+  - 0.61092
+  - 0.60473
+  - 0.61953
+  - 0.60621
+  - 0.7168
+  - 0.69274
+  - 0.68326
+  - 0.68593
+  - 0.67687
+  - 0.69088
+  - 0.73248
+inference_stats:
+  batch_size: 1
+  fps_batch_based: !!python/object/apply:numpy._core.multiarray.scalar
+  - &id001 !!python/object/apply:numpy.dtype
+    args:
+    - f8
+    - false
+    - true
+    state: !!python/tuple
+    - 3
+    - <
+    - null
+    - null
+    - null
+    - -1
+    - -1
+    - 0
+  - !!binary |
+    dFyq6O3Ua0A=
+  mean_batch_time_sec: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KqkT0HBlcj8=
+  mean_img_time_sec: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    KqkT0HBlcj8=
+  std_batch_time_sec: !!python/object/apply:numpy._core.multiarray.scalar
+  - *id001
+  - !!binary |
+    YZfmiaM79D4=
+metadata:
+  device: cuda
+  duration: 0:03:08
+model_info_ft:
+  frozen_params: 0
+  total_params: 21777514
+  trainable_params: 21777514
+  trainable_percentage: 100.0
+model_info_tl:
+  frozen_params: 3846464
+  total_params: 21896248
+  trainable_params: 18049784
+  trainable_percentage: 82.43
+model_name: yolo26m
+model_size_mb: 41.96
+results_test:
+  f1: 0.8719118843992547
+  map: 0.6698967023121372
+  map_50: 0.9304271405816543
+  precision: 0.8939547431414877
+  recall: 0.8509299279565261
+test_diagnostics:
+  confusion_matrix_counts:
+  - - 0
+    - 24
+    - 26
+    - 30
+  - - 566
+    - 1448
+    - 0
+    - 0
+  - - 108
+    - 0
+    - 685
+    - 0
+  - - 393
+    - 0
+    - 0
+    - 692
+  confusion_matrix_labels:
+  - background
+  - horse
+  - penguin
+  - pig
+  files:
+    confusion_matrix_counts_csv: /home/cgonzalez/Object_Recognition/runs/yolo26m/set3_random_full/fold_5_config/test_diagnostics/confusion_matrix_counts.csv
+    confusion_matrix_counts_jpg: /home/cgonzalez/Object_Recognition/runs/yolo26m/set3_random_full/fold_5_config/test_diagnostics/confusion_matrix_counts.jpg
+    confusion_matrix_counts_pdf: /home/cgonzalez/Object_Recognition/runs/yolo26m/set3_random_full/fold_5_config/test_diagnostics/confusion_matrix_counts.pdf
+    confusion_matrix_normalized_csv: /home/cgonzalez/Object_Recognition/runs/yolo26m/set3_random_full/fold_5_config/test_diagnostics/confusion_matrix_normalized_by_gt.csv
+    confusion_matrix_normalized_jpg: /home/cgonzalez/Object_Recognition/runs/yolo26m/set3_random_full/fold_5_config/test_diagnostics/confusion_matrix_normalized_by_gt.jpg
+    confusion_matrix_normalized_pdf: /home/cgonzalez/Object_Recognition/runs/yolo26m/set3_random_full/fold_5_config/test_diagnostics/confusion_matrix_normalized_by_gt.pdf
+    global_metrics_json: /home/cgonzalez/Object_Recognition/runs/yolo26m/set3_random_full/fold_5_config/test_diagnostics/precision_recall_f1_global.json
+    per_class_metrics_csv: /home/cgonzalez/Object_Recognition/runs/yolo26m/set3_random_full/fold_5_config/test_diagnostics/precision_recall_f1_per_class.csv
+    pr_curve_micro_csv: /home/cgonzalez/Object_Recognition/runs/yolo26m/set3_random_full/fold_5_config/test_diagnostics/pr_curve_micro.csv
+    pr_curve_per_class_csv: /home/cgonzalez/Object_Recognition/runs/yolo26m/set3_random_full/fold_5_config/test_diagnostics/pr_curve_per_class.csv
+    pr_curves_pdf: /home/cgonzalez/Object_Recognition/runs/yolo26m/set3_random_full/fold_5_config/test_diagnostics/precision_recall_curves.pdf
+    precision_recall_f1_vs_threshold_pdf: /home/cgonzalez/Object_Recognition/runs/yolo26m/set3_random_full/fold_5_config/test_diagnostics/precision_recall_f1_vs_score_threshold.pdf
+  global_metrics:
+    f1_macro: 0.8358553939009467
+    f1_micro: 0.8312490804766809
+    fn: 1067
+    fp: 80
+    precision_macro: 0.9685253972843709
+    precision_micro: 0.9724612736660929
+    recall_macro: 0.7401878568840455
+    recall_micro: 0.7258478931140802
+    tp: 2825
+  iou_thresh: 0.5
+  num_images: 372
+  output_dir: /home/cgonzalez/Object_Recognition/runs/yolo26m/set3_random_full/fold_5_config/test_diagnostics
+  per_class_metrics:
+  - class_id: 0
+    class_name: horse
+    f1: 0.8307515777395296
+    fn: 566
+    fp: 24
+    precision: 0.9836956521739131
+    recall: 0.7189672293942403
+    support_gt: 2014
+    support_pred: 1472
+    tp: 1448
+  - class_id: 1
+    class_name: penguin
+    f1: 0.910904255319149
+    fn: 108
+    fp: 26
+    precision: 0.9634317862165963
+    recall: 0.8638083228247163
+    support_gt: 793
+    support_pred: 711
+    tp: 685
+  - class_id: 2
+    class_name: pig
+    f1: 0.7659103486441615
+    fn: 393
+    fp: 30
+    precision: 0.9584487534626038
+    recall: 0.6377880184331797
+    support_gt: 1085
+    support_pred: 722
+    tp: 692
+  score_thresh: 0.5
+test_mAP50: 0.9304271405816543

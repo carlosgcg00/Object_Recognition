@@ -1,0 +1,352 @@
+{
+    "metadata": {
+        "duration": "0:01:58",
+        "device": "cuda"
+    },
+    "model_name": "yolo26n",
+    "model_size_mb": 5.11,
+    "model_info_tl": {
+        "total_params": 2572280,
+        "trainable_params": 1901208,
+        "frozen_params": 671072,
+        "trainable_percentage": 73.91
+    },
+    "model_info_ft": {
+        "total_params": 2504970,
+        "trainable_params": 2504970,
+        "frozen_params": 0,
+        "trainable_percentage": 100.0
+    },
+    "epochs_tl": 10,
+    "epochs_ft": 20,
+    "history": {
+        "train_box_loss": [
+            1.46204,
+            1.42832,
+            1.40698,
+            1.3878,
+            1.37493,
+            1.35511,
+            1.5912,
+            1.4362,
+            1.35159,
+            1.31766,
+            1.28343,
+            1.2464,
+            1.23552
+        ],
+        "train_class_loss": [
+            2.75847,
+            1.92165,
+            1.60712,
+            1.44267,
+            1.35525,
+            1.29668,
+            2.50447,
+            1.89888,
+            1.7104,
+            1.6019,
+            1.51878,
+            1.47155,
+            1.41662
+        ],
+        "train_dfl_loss": [
+            0.00782,
+            0.00772,
+            0.00751,
+            0.00736,
+            0.00727,
+            0.00718,
+            0.0077,
+            0.00666,
+            0.00611,
+            0.00587,
+            0.00575,
+            0.00562,
+            0.00549
+        ],
+        "train_loss": [
+            4.22833,
+            3.35769,
+            3.02161,
+            2.83783,
+            2.73745,
+            2.65897,
+            4.10337,
+            3.3417399999999997,
+            3.0681,
+            2.92543,
+            2.80796,
+            2.72357,
+            2.65763
+        ],
+        "val_box_loss": [
+            1.37869,
+            1.43727,
+            1.45005,
+            1.5068,
+            1.56449,
+            1.57537,
+            1.32863,
+            1.32642,
+            1.38712,
+            1.38999,
+            1.41535,
+            1.39057,
+            1.41171
+        ],
+        "val_class_loss": [
+            4.2706,
+            3.11961,
+            2.54285,
+            2.03407,
+            1.85062,
+            1.84976,
+            3.23009,
+            2.474,
+            2.07578,
+            1.96496,
+            1.94445,
+            1.92394,
+            1.86983
+        ],
+        "val_dfl_loss": [
+            0.00745,
+            0.00758,
+            0.00767,
+            0.00792,
+            0.00847,
+            0.00831,
+            0.00705,
+            0.00703,
+            0.00741,
+            0.00737,
+            0.00747,
+            0.00731,
+            0.00746
+        ],
+        "val_loss": [
+            5.65674,
+            4.56446,
+            4.00057,
+            3.54879,
+            3.42358,
+            3.43344,
+            4.56577,
+            3.80745,
+            3.47031,
+            3.36232,
+            3.36727,
+            3.32182,
+            3.289
+        ],
+        "val_precision": [
+            1.0,
+            0.28258,
+            0.50652,
+            0.5414,
+            0.53075,
+            0.54894,
+            0.33726,
+            0.24566,
+            0.5737,
+            0.53673,
+            0.52993,
+            0.53111,
+            0.51188
+        ],
+        "val_recall": [
+            0.00146,
+            0.75675,
+            0.53942,
+            0.50474,
+            0.5248,
+            0.53538,
+            0.75128,
+            0.84209,
+            0.43982,
+            0.45633,
+            0.44858,
+            0.45405,
+            0.47447
+        ],
+        "val_f1": [
+            0.002915742986082889,
+            0.4115005107954114,
+            0.5224525609265105,
+            0.5224276547839902,
+            0.5277582253066342,
+            0.5420752074841817,
+            0.46553491919878986,
+            0.3803591404241862,
+            0.4979176168411318,
+            0.4932753276410758,
+            0.4858734135995195,
+            0.48956614773675183,
+            0.4924655571301712
+        ],
+        "val_map50": [
+            0.50072,
+            0.48535,
+            0.5263,
+            0.53258,
+            0.54451,
+            0.56577,
+            0.52216,
+            0.50915,
+            0.49449,
+            0.4783,
+            0.48116,
+            0.49614,
+            0.49443
+        ],
+        "val_map": [
+            0.30043,
+            0.26391,
+            0.29475,
+            0.27841,
+            0.27529,
+            0.28524,
+            0.29801,
+            0.30141,
+            0.26881,
+            0.25951,
+            0.24847,
+            0.25796,
+            0.25262
+        ],
+        "lr": [
+            0.00019661,
+            0.000357346,
+            0.000478481,
+            0.000560017,
+            0.000601953,
+            0.000505,
+            0.0001,
+            9.93906e-05,
+            9.75773e-05,
+            9.46048e-05,
+            9.05463e-05,
+            8.55018e-05,
+            7.95954e-05
+        ]
+    },
+    "results_test": {
+        "map_50": 0.5321104053116551,
+        "map": 0.32966728372263104,
+        "precision": 0.47196487611912996,
+        "recall": 0.5391535959907204,
+        "f1": 0.5033268892681529
+    },
+    "test_diagnostics": {
+        "iou_thresh": 0.5,
+        "score_thresh": 0.5,
+        "num_images": 372,
+        "output_dir": "/home/cgonzalez/Object_Recognition/runs/yolo26n/set3_random_full/fold_2_config/test_diagnostics",
+        "global_metrics": {
+            "tp": 836,
+            "fp": 219,
+            "fn": 3056,
+            "precision_micro": 0.7924170616113744,
+            "recall_micro": 0.2147995889003083,
+            "f1_micro": 0.337982615726703,
+            "precision_macro": 0.8104166666666667,
+            "recall_macro": 0.14723543459719682,
+            "f1_macro": 0.2079057633540032
+        },
+        "per_class_metrics": [
+            {
+                "class_id": 0,
+                "class_name": "horse",
+                "tp": 775,
+                "fp": 217,
+                "fn": 1239,
+                "support_gt": 2014,
+                "support_pred": 992,
+                "precision": 0.78125,
+                "recall": 0.38480635551142006,
+                "f1": 0.5156353958749169
+            },
+            {
+                "class_id": 1,
+                "class_name": "penguin",
+                "tp": 2,
+                "fp": 1,
+                "fn": 791,
+                "support_gt": 793,
+                "support_pred": 3,
+                "precision": 0.6666666666666666,
+                "recall": 0.0025220680958385876,
+                "f1": 0.0050251256281407045
+            },
+            {
+                "class_id": 2,
+                "class_name": "pig",
+                "tp": 59,
+                "fp": 1,
+                "fn": 1026,
+                "support_gt": 1085,
+                "support_pred": 60,
+                "precision": 0.9833333333333333,
+                "recall": 0.054377880184331796,
+                "f1": 0.10305676855895195
+            }
+        ],
+        "confusion_matrix_counts": [
+            [
+                0,
+                206,
+                1,
+                1
+            ],
+            [
+                1239,
+                775,
+                0,
+                0
+            ],
+            [
+                780,
+                11,
+                2,
+                0
+            ],
+            [
+                1026,
+                0,
+                0,
+                59
+            ]
+        ],
+        "confusion_matrix_labels": [
+            "background",
+            "horse",
+            "penguin",
+            "pig"
+        ],
+        "files": {
+            "confusion_matrix_counts_csv": "/home/cgonzalez/Object_Recognition/runs/yolo26n/set3_random_full/fold_2_config/test_diagnostics/confusion_matrix_counts.csv",
+            "confusion_matrix_normalized_csv": "/home/cgonzalez/Object_Recognition/runs/yolo26n/set3_random_full/fold_2_config/test_diagnostics/confusion_matrix_normalized_by_gt.csv",
+            "confusion_matrix_counts_pdf": "/home/cgonzalez/Object_Recognition/runs/yolo26n/set3_random_full/fold_2_config/test_diagnostics/confusion_matrix_counts.pdf",
+            "confusion_matrix_counts_jpg": "/home/cgonzalez/Object_Recognition/runs/yolo26n/set3_random_full/fold_2_config/test_diagnostics/confusion_matrix_counts.jpg",
+            "confusion_matrix_normalized_pdf": "/home/cgonzalez/Object_Recognition/runs/yolo26n/set3_random_full/fold_2_config/test_diagnostics/confusion_matrix_normalized_by_gt.pdf",
+            "confusion_matrix_normalized_jpg": "/home/cgonzalez/Object_Recognition/runs/yolo26n/set3_random_full/fold_2_config/test_diagnostics/confusion_matrix_normalized_by_gt.jpg",
+            "per_class_metrics_csv": "/home/cgonzalez/Object_Recognition/runs/yolo26n/set3_random_full/fold_2_config/test_diagnostics/precision_recall_f1_per_class.csv",
+            "global_metrics_json": "/home/cgonzalez/Object_Recognition/runs/yolo26n/set3_random_full/fold_2_config/test_diagnostics/precision_recall_f1_global.json",
+            "pr_curve_micro_csv": "/home/cgonzalez/Object_Recognition/runs/yolo26n/set3_random_full/fold_2_config/test_diagnostics/pr_curve_micro.csv",
+            "pr_curve_per_class_csv": "/home/cgonzalez/Object_Recognition/runs/yolo26n/set3_random_full/fold_2_config/test_diagnostics/pr_curve_per_class.csv",
+            "pr_curves_pdf": "/home/cgonzalez/Object_Recognition/runs/yolo26n/set3_random_full/fold_2_config/test_diagnostics/precision_recall_curves.pdf",
+            "precision_recall_f1_vs_threshold_pdf": "/home/cgonzalez/Object_Recognition/runs/yolo26n/set3_random_full/fold_2_config/test_diagnostics/precision_recall_f1_vs_score_threshold.pdf"
+        }
+    },
+    "best_val_map50_TL": 0.5007231555880205,
+    "best_val_map50_FT": 0.5094568066685426,
+    "test_mAP50": 0.5321104053116551,
+    "inference_stats": {
+        "batch_size": 1,
+        "mean_batch_time_sec": 0.0040523599863052364,
+        "std_batch_time_sec": 1.636829220353825e-05,
+        "mean_img_time_sec": 0.0040523599863052364,
+        "fps_batch_based": 246.76978436749297
+    }
+}

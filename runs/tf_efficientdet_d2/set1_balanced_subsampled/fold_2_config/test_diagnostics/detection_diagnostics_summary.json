@@ -1,0 +1,101 @@
+{
+    "iou_thresh": 0.5,
+    "score_thresh": 0.5,
+    "num_images": 123,
+    "output_dir": "/home/cgonzalez/Object_Recognition/runs/tf_efficientdet_d2/set1_balanced_subsampled/fold_2_config/test_diagnostics",
+    "global_metrics": {
+        "tp": 1174,
+        "fp": 336,
+        "fn": 604,
+        "precision_micro": 0.7774834437086092,
+        "recall_micro": 0.6602924634420697,
+        "f1_micro": 0.7141119221411192,
+        "precision_macro": 0.7737449073351711,
+        "recall_macro": 0.7012923904553708,
+        "f1_macro": 0.7141838707366944
+    },
+    "per_class_metrics": [
+        {
+            "class_id": 1,
+            "class_name": "horse",
+            "tp": 280,
+            "fp": 155,
+            "fn": 42,
+            "support_gt": 322,
+            "support_pred": 435,
+            "precision": 0.6436781609195402,
+            "recall": 0.8695652173913043,
+            "f1": 0.7397622192866579
+        },
+        {
+            "class_id": 2,
+            "class_name": "penguin",
+            "tp": 523,
+            "fp": 127,
+            "fn": 186,
+            "support_gt": 709,
+            "support_pred": 650,
+            "precision": 0.8046153846153846,
+            "recall": 0.7376586741889986,
+            "f1": 0.7696835908756439
+        },
+        {
+            "class_id": 3,
+            "class_name": "pig",
+            "tp": 371,
+            "fp": 54,
+            "fn": 376,
+            "support_gt": 747,
+            "support_pred": 425,
+            "precision": 0.8729411764705882,
+            "recall": 0.4966532797858099,
+            "f1": 0.6331058020477816
+        }
+    ],
+    "confusion_matrix_counts": [
+        [
+            0,
+            99,
+            92,
+            54
+        ],
+        [
+            42,
+            280,
+            0,
+            0
+        ],
+        [
+            186,
+            0,
+            523,
+            0
+        ],
+        [
+            285,
+            56,
+            35,
+            371
+        ]
+    ],
+    "confusion_matrix_labels": [
+        "background",
+        "horse",
+        "penguin",
+        "pig"
+    ],
+    "files": {
+        "confusion_matrix_counts_csv": "/home/cgonzalez/Object_Recognition/runs/tf_efficientdet_d2/set1_balanced_subsampled/fold_2_config/test_diagnostics/confusion_matrix_counts.csv",
+        "confusion_matrix_normalized_csv": "/home/cgonzalez/Object_Recognition/runs/tf_efficientdet_d2/set1_balanced_subsampled/fold_2_config/test_diagnostics/confusion_matrix_normalized_by_gt.csv",
+        "confusion_matrix_counts_pdf": "/home/cgonzalez/Object_Recognition/runs/tf_efficientdet_d2/set1_balanced_subsampled/fold_2_config/test_diagnostics/confusion_matrix_counts.pdf",
+        "confusion_matrix_counts_jpg": "/home/cgonzalez/Object_Recognition/runs/tf_efficientdet_d2/set1_balanced_subsampled/fold_2_config/test_diagnostics/confusion_matrix_counts.jpg",
+        "confusion_matrix_normalized_pdf": "/home/cgonzalez/Object_Recognition/runs/tf_efficientdet_d2/set1_balanced_subsampled/fold_2_config/test_diagnostics/confusion_matrix_normalized_by_gt.pdf",
+        "confusion_matrix_normalized_jpg": "/home/cgonzalez/Object_Recognition/runs/tf_efficientdet_d2/set1_balanced_subsampled/fold_2_config/test_diagnostics/confusion_matrix_normalized_by_gt.jpg",
+        "per_class_metrics_csv": "/home/cgonzalez/Object_Recognition/runs/tf_efficientdet_d2/set1_balanced_subsampled/fold_2_config/test_diagnostics/precision_recall_f1_per_class.csv",
+        "global_metrics_json": "/home/cgonzalez/Object_Recognition/runs/tf_efficientdet_d2/set1_balanced_subsampled/fold_2_config/test_diagnostics/precision_recall_f1_global.json",
+        "pr_curve_micro_csv": "/home/cgonzalez/Object_Recognition/runs/tf_efficientdet_d2/set1_balanced_subsampled/fold_2_config/test_diagnostics/pr_curve_micro.csv",
+        "pr_curve_per_class_csv": "/home/cgonzalez/Object_Recognition/runs/tf_efficientdet_d2/set1_balanced_subsampled/fold_2_config/test_diagnostics/pr_curve_per_class.csv",
+        "pr_curves_pdf": "/home/cgonzalez/Object_Recognition/runs/tf_efficientdet_d2/set1_balanced_subsampled/fold_2_config/test_diagnostics/precision_recall_curves.pdf",
+        "precision_recall_f1_vs_threshold_pdf": "/home/cgonzalez/Object_Recognition/runs/tf_efficientdet_d2/set1_balanced_subsampled/fold_2_config/test_diagnostics/precision_recall_f1_vs_score_threshold.pdf"
+    }
+}
