@@ -1,15 +1,21 @@
+# src/dataset/splitter.py
 import random
 from pathlib import Path
 from typing import Dict, List, Tuple
 from utils.file_utils import save_txt
+import pandas as pd
+import random
 
-def get_processed_videos_dict(processed_dir: Path, classes: List[str]) -> Dict[str, Dict[str, List[Path]]]:
+
+
+def get_processed_videos_dict(processed_dir: Path, classes: List[str], images_folder: str = "images") -> Dict[str, Dict[str, List[Path]]]:
     """
     Scans the processed/images directory and groups frames by class and video name.
 
     Args:
         processed_dir (Path): Path to the processed dataset directory (e.g., dataset/processed).
         classes (List[str]): List of class names to look for (e.g., ['horse', 'penguin', 'pig']).
+        images_folder (str): Name of the folder containing the images (default is "images").
 
     Returns:
         Dict[str, Dict[str, List[Path]]]: Nested dictionary structured as:
@@ -21,7 +27,7 @@ def get_processed_videos_dict(processed_dir: Path, classes: List[str]) -> Dict[s
                 ...
             }
     """
-    img_dir = processed_dir / "images"
+    img_dir = processed_dir / images_folder
     dataset_dict = {cls: {} for cls in classes}
     
     # Iterate over all subdirectories
@@ -231,7 +237,8 @@ def generate_random_kfold_yolo(
     subsample: bool = False,
     target_frames: int = 300,
     class_names: str = None,
-    step: int = None
+    step: int = None,
+    seed: int = 42
 ) -> None:
     """
     Generates YOLO .txt files for an unbalanced/random K-Fold setup.
@@ -247,6 +254,7 @@ def generate_random_kfold_yolo(
         subsample (bool, optional): If True, applies 'frame_splitter' to the frames. Defaults to False.
         target_frames (int, optional): Target number of frames per video if subsampling. Defaults to 300.
         step (int, optional): Forced step jump if subsampling. Defaults to None.
+        seed (int, optional): Random seed for reproducibility. Defaults to 42.
     """
     out_dir = output_path / set_name
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -273,7 +281,7 @@ def generate_random_kfold_yolo(
     save_txt(test_lines, out_dir / "test.txt")
     
     # 2. GLOBAL RANDOM SHUFFLE
-    rng = random.Random(42) # Set seed to ensure folds are reproducible
+    rng = random.Random(seed) # Set seed to ensure folds are reproducible
     rng.shuffle(cv_videos_flat)
     
     # 3. GENERATE UNBALANCED K-FOLDS
@@ -321,6 +329,77 @@ def generate_random_kfold_yolo(
         
     print(f"✅ Random/Unbalanced YOLO configuration files generated successfully in: {out_dir}")
 
+
+def get_experiment_splits_df(
+    data_dict, 
+    k_folds, 
+    train_videos_per_class, 
+    is_random=False,
+    seed=42
+    ):
+    
+    """
+    Generate a DataFrame with the assignment of videos to folds.
+    
+    Args:
+        data_dict (Dict): Dictionary with the dataset.
+        k_folds (int): Number of folds.
+        train_videos_per_class (int): Number of videos per class for training.
+        is_random (bool): If True, generates random splits.
+        seed (int): Random seed for reproducibility.
+    Returns:
+        pd.DataFrame: DataFrame with the assignment of videos to folds.
+    """
+
+    all_videos = []
+    test_videos = []
+    
+    for class_name, videos_dict in data_dict.items():
+        vids = sorted(list(videos_dict.keys()))
+        test_videos.append(vids[-1])
+        all_videos.extend(vids)
+    
+    # Create base DF with all videos
+    df = pd.DataFrame({'video': all_videos})
+    
+    # Replicate Fold logic
+    for i in range(k_folds):
+        fold_col = f'Fold_{i+1}'
+        df[fold_col] = 'Val' # Default
+        
+        # Mark Test (es igual en todos los folds)
+        df.loc[df['video'].isin(test_videos), fold_col] = 'Test'
+        
+        if not is_random:
+            # Balanced logic (Rotation by class)
+            for class_name, videos_dict in data_dict.items():
+                cv_vids = sorted(list(videos_dict.keys()))[:-1]
+                shift = i % len(cv_vids)
+                rotated = cv_vids[shift:] + cv_vids[:shift]
+                train_vids = rotated[:train_videos_per_class]
+                
+                df.loc[df['video'].isin(train_vids), fold_col] = 'Train'
+        else:
+            # Lógica Random (Global)
+            cv_videos_flat = []
+            for class_name, videos_dict in data_dict.items():
+                cv_videos_flat.extend([(class_name, v) for v in sorted(list(videos_dict.keys()))[:-1]])
+            
+            rng = random.Random(seed)
+            rng.shuffle(cv_videos_flat)
+            
+            total_cv = len(cv_videos_flat)
+            fold_size = total_cv // k_folds
+            val_start = i * fold_size
+            val_end = val_start + fold_size if i < k_folds - 1 else total_cv
+            
+            val_vids = [v[1] for v in cv_videos_flat[val_start:val_end]]
+            # Los que no son Test ni Val, son Train
+            df.loc[(~df['video'].isin(test_videos)) & (~df['video'].isin(val_vids)), fold_col] = 'Train'
+            df.loc[df['video'].isin(val_vids), fold_col] = 'Val'
+
+    return df.sort_values('video').reset_index(drop=True)
+    
 
 def create_yolo_yaml(
     output_path: Path, 

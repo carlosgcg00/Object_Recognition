@@ -30,8 +30,8 @@ def parse_annotations(gt_raw: List[List[int]]) -> List[Dict[str, int]]:
                 'target_id': ann[1],
                 'top_left_x': ann[2],
                 'top_left_y': ann[3],
-                'width': ann[4],
-                'height': ann[5],
+                'bbox_width': ann[4],
+                'bbox_height': ann[5],
                 'confidence': ann[6],
                 'class_id': ann[7],
                 'visibility': ann[8]

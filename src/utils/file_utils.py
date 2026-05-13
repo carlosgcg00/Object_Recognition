@@ -68,3 +68,33 @@ def save_image(frame: np.ndarray, file_path: Union[str, Path]) -> None:
     """
     # OpenCV requires strings for paths in some underlying C++ implementations
     cv2.imwrite(str(file_path), frame)
+    
+
+def build_ordered_class_dict(dataset_names: List[str], class_order: List[str], one_based: bool = False) -> Dict[int, str]:
+    """
+    Builds an ordered {class_id: class_name} dict following class_order.
+
+    Args:
+        dataset_names (List[str]): Names from dataset YAML.
+        class_order (List[str]): Desired order from paths.yaml.
+        one_based (bool): True for EfficientDet (1..N), False for YOLO (0..N-1).
+
+    Returns:
+        Dict[int, str]: Ordered mapping preserving insertion order.
+    """
+    offset = 1 if one_based else 0
+    name_to_id = {name: i + offset for i, name in enumerate(dataset_names)}
+
+    ordered = {}
+
+    # First, classes appearing in paths.yaml order
+    for name in class_order:
+        if name in name_to_id:
+            ordered[name_to_id[name]] = name
+
+    # Then any remaining classes not listed in paths.yaml
+    for name in dataset_names:
+        if name not in class_order:
+            ordered[name_to_id[name]] = name
+
+    return ordered

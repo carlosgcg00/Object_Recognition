@@ -16,3 +16,17 @@ models
 
 !src/dataset
 !src/models
+
+phase_ft/
+phase_pt/
+predicts/
+test_predictions/
+tracking/
+*.pt
+*.pth
+
+runs/
+notebook_scripts/docs/videos/
+*.mp4
+*.pt
+*.pth

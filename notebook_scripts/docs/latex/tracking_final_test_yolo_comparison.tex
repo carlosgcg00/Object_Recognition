@@ -1,0 +1,12 @@
+\begin{table}
+\caption{Comparación final de ByteTrack y BoT-SORT en test usando detecciones YOLO.}
+\label{tab:tracking_final_test_yolo_comparison}
+\begin{tabular}{lrrrrrrrrrrrrrrrr}
+\toprule
+Tracker & Frames & Objects & IDF1 $\uparrow$ & IDP $\uparrow$ & IDR $\uparrow$ & Recall $\uparrow$ & Precision $\uparrow$ & MOTA $\uparrow$ & MOTP $\downarrow$ & MT/obj $\uparrow$ & PT/obj & ML/obj $\downarrow$ & FP/obj $\downarrow$ & FN/obj $\downarrow$ & IDs/obj $\downarrow$ & FM/obj $\downarrow$ \\
+\midrule
+BoT-SORT & 372 & 3892 & 0.621 & 0.856 & 0.491 & 0.567 & 0.996 & 0.553 & 0.134 & 0.005 & 0.009 & 0.002 & 0.002 & 0.433 & 0.012 & 0.059 \\
+ByteTrack & 372 & 3892 & 0.283 & 0.462 & 0.204 & 0.447 & 0.997 & 0.372 & 0.164 & 0.000 & 0.012 & 0.004 & 0.001 & 0.553 & 0.073 & 0.093 \\
+\bottomrule
+\end{tabular}
+\end{table}

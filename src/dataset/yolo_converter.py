@@ -48,8 +48,10 @@ def process_video_to_yolo(
     gt_path: Union[str, Path], 
     output_img_dir: Union[str, Path], 
     output_lbl_dir: Union[str, Path],
-    class_map: Dict[int, int], # <--- NUEVO ARGUMENTO AÑADIDO
-    frame_step: int = 1
+    class_map: Dict[int, int],
+    frame_step: int = 1,
+    label_tracks_bool: bool = False,
+    val_visibility: float = -1.0
 ) -> None:
     """
     Extracts frames from a video and converts their annotations to YOLO format.
@@ -61,6 +63,11 @@ def process_video_to_yolo(
         output_lbl_dir: Directory to save the YOLO .txt labels.
         class_map: Dictionary to map original IDs to YOLO IDs (e.g., {6: 0, 7: 1, 8: 2}).
         frame_step: Extract every N-th frame. Defaults to 1 (all frames).
+        label_tracks_bool: Whether to save tracking info (target_id) in labels.
+        val_visibility: Visibility threshold for annotations.
+
+    Returns:
+        None. Saves images and labels to the specified directories.
     """
     video_path = Path(video_path)
     gt_path = Path(gt_path)
@@ -70,6 +77,7 @@ def process_video_to_yolo(
     # Ensure output directories exist
     output_img_dir.mkdir(parents=True, exist_ok=True)
     output_lbl_dir.mkdir(parents=True, exist_ok=True)
+
 
     # 1. Extract video info for normalization
     v_info = extract_video_info(video_path)
@@ -102,26 +110,34 @@ def process_video_to_yolo(
         # Process only every `frame_step` frames
         if frame_id % frame_step == 0:
             # Prepare YOLO annotations for this specific frame
+            
             yolo_lines = []
             if frame_id in anns_by_frame:
                 for ann in anns_by_frame[frame_id]:
-                    # ----> NUEVO: REMAPEO DEL ID AL VUELO <----
                     original_id = ann['class_id']
                     
-                    # Si el ID original no está en nuestro mapa, lo saltamos para evitar errores
                     if original_id not in class_map:
                         continue
-                        
+                    
+                    visibility = float(ann.get("visibility", 1.0))
+
+                    if visibility != val_visibility:
+                        print(f"Skipping annotation in frame {frame_id} due to visibility {visibility} != {val_visibility}")
+                        continue                    
+                    
+                    
                     yolo_id = class_map[original_id]
 
                     x_n, y_n, w_n, h_n = normalize_bbox(
                         ann['top_left_x'], ann['top_left_y'], 
-                        ann['width'], ann['height'], 
+                        ann['bbox_width'], ann['bbox_height'], 
                         img_w, img_h
                     )
-                    
-                    # Usamos el yolo_id (0, 1, 2) en lugar de ann['class_id'] (6, 7, 8)
-                    yolo_lines.append(f"{yolo_id} {x_n:.6f} {y_n:.6f} {w_n:.6f} {h_n:.6f}")
+                    if label_tracks_bool:
+                        target_id = ann['target_id']
+                        yolo_lines.append(f"{yolo_id} {target_id} {x_n:.6f} {y_n:.6f} {w_n:.6f} {h_n:.6f}")
+                    else:
+                        yolo_lines.append(f"{yolo_id} {x_n:.6f} {y_n:.6f} {w_n:.6f} {h_n:.6f}")
 
             # Define output filenames
             img_filename = f"{base_name}_frame_{frame_id}.jpg"
@@ -132,6 +148,7 @@ def process_video_to_yolo(
 
             # Save the image
             cv2.imwrite(str(img_out_path), frame)
+            
             
             # Save the annotations
             save_txt(yolo_lines, lbl_out_path)

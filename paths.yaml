@@ -17,7 +17,29 @@ models:
   efficientdet:
     path: "./models/efficientdet"
 
-training:
-  img_size: 640
-  batch_size: 16
-  epochs: 100
+selected_models_efficientdet:
+  tf_efficientdet_d0:
+    img_size: 512
+  # tf_efficientdet_d1:
+  #   img_size: 640
+  tf_efficientdet_d2:
+    img_size: 768
+  # tf_efficientdet_d3:
+  #   img_size: 896
+  # tf_efficientdet_d4:
+  #   img_size: 1024
+  # tf_efficientdet_d5:
+  #   img_size: 1152
+  # tf_efficientdet_d6:
+  #   img_size: 1280
+  # tf_efficientdet_d7:
+  #   img_size: 1536
+  # tf_efficientdet_d7x:
+  #   img_size: 1536
+
+
+selected_models_yolo:
+  yolo26n:
+    img_size: 640
+  yolo26m:
+    img_size: 640

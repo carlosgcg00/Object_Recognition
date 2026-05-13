@@ -1,0 +1,22 @@
+\begin{table}
+\caption{Resumen ponderado de métricas de tracking por tracker, partición y tipo de entrada.}
+\label{tab:tracking_weighted_summary}
+\begin{tabular}{lllrrrrrrrrrrrrrrrr}
+\toprule
+Tracker & Split & Entrada & Frames & Objects & IDF1 $\uparrow$ & IDP $\uparrow$ & IDR $\uparrow$ & Recall $\uparrow$ & Precision $\uparrow$ & MOTA $\uparrow$ & MOTP $\downarrow$ & MT/obj $\uparrow$ & PT/obj & ML/obj $\downarrow$ & FP/obj $\downarrow$ & FN/obj $\downarrow$ & IDs/obj $\downarrow$ & FM/obj $\downarrow$ \\
+\midrule
+BoT-SORT & Train & GT labels & 761 & 13657 & 0.937 & 0.946 & 0.929 & 0.982 & 1.000 & 0.973 & 0.046 & 0.022 & 0.001 & 0.000 & 0.000 & 0.018 & 0.008 & 0.005 \\
+BoT-SORT & Train & YOLO detections & 761 & 13657 & 0.717 & 0.912 & 0.598 & 0.653 & 0.998 & 0.641 & 0.093 & 0.008 & 0.011 & 0.004 & 0.001 & 0.347 & 0.010 & 0.048 \\
+BoT-SORT & Val & GT labels & 309 & 5494 & 0.899 & 0.908 & 0.892 & 0.973 & 1.000 & 0.947 & 0.056 & 0.022 & 0.002 & 0.000 & 0.000 & 0.027 & 0.026 & 0.015 \\
+BoT-SORT & Val & YOLO detections & 309 & 5494 & 0.549 & 0.907 & 0.410 & 0.431 & 0.993 & 0.422 & 0.156 & 0.003 & 0.011 & 0.009 & 0.003 & 0.569 & 0.006 & 0.063 \\
+BoT-SORT & Test & GT labels & 372 & 3892 & 0.820 & 0.823 & 0.818 & 0.992 & 0.999 & 0.984 & 0.048 & 0.016 & 0.000 & 0.000 & 0.001 & 0.008 & 0.008 & 0.004 \\
+BoT-SORT & Test & YOLO detections & 372 & 3892 & 0.621 & 0.856 & 0.491 & 0.567 & 0.996 & 0.553 & 0.134 & 0.005 & 0.009 & 0.002 & 0.002 & 0.433 & 0.012 & 0.059 \\
+ByteTrack & Train & GT labels & 761 & 13657 & 0.753 & 0.777 & 0.731 & 0.932 & 0.999 & 0.863 & 0.110 & 0.020 & 0.003 & 0.000 & 0.001 & 0.068 & 0.068 & 0.051 \\
+ByteTrack & Train & YOLO detections & 761 & 13657 & 0.507 & 0.707 & 0.400 & 0.556 & 0.998 & 0.495 & 0.124 & 0.004 & 0.014 & 0.005 & 0.001 & 0.444 & 0.060 & 0.076 \\
+ByteTrack & Val & GT labels & 309 & 5494 & 0.670 & 0.707 & 0.640 & 0.874 & 0.998 & 0.767 & 0.128 & 0.015 & 0.009 & 0.000 & 0.002 & 0.126 & 0.105 & 0.084 \\
+ByteTrack & Val & YOLO detections & 309 & 5494 & 0.335 & 0.701 & 0.234 & 0.322 & 0.991 & 0.282 & 0.171 & 0.001 & 0.011 & 0.013 & 0.002 & 0.678 & 0.037 & 0.064 \\
+ByteTrack & Test & GT labels & 372 & 3892 & 0.581 & 0.598 & 0.566 & 0.933 & 1.000 & 0.866 & 0.111 & 0.013 & 0.003 & 0.000 & 0.000 & 0.067 & 0.066 & 0.051 \\
+ByteTrack & Test & YOLO detections & 372 & 3892 & 0.283 & 0.462 & 0.204 & 0.447 & 0.997 & 0.372 & 0.164 & 0.000 & 0.012 & 0.004 & 0.001 & 0.553 & 0.073 & 0.093 \\
+\bottomrule
+\end{tabular}
+\end{table}

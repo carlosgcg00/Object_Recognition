@@ -1,0 +1,22 @@
+\begin{table}
+\caption{Tiempo medio por frame para detector, tracker y pipeline completo por partición y tipo de entrada.}
+\label{tab:tracking_timing_by_split_source}
+\begin{tabular}{lllrrrrr}
+\toprule
+Tracker & Split & Entrada & num_sequences & num_frames & Detector/frame (ms) $\downarrow$ & Tracker/frame (ms) $\downarrow$ & Total/frame (ms) $\downarrow$ \\
+\midrule
+BoT-SORT & Train & GT labels & 9 & 761 & 0.000 & 67.683 & 67.683 \\
+BoT-SORT & Train & YOLO detections & 9 & 761 & 15.118 & 69.382 & 84.500 \\
+BoT-SORT & Val & GT labels & 5 & 309 & 0.000 & 59.809 & 59.809 \\
+BoT-SORT & Val & YOLO detections & 5 & 309 & 15.605 & 59.219 & 74.824 \\
+BoT-SORT & Test & GT labels & 3 & 372 & 0.000 & 44.844 & 44.844 \\
+BoT-SORT & Test & YOLO detections & 3 & 372 & 15.360 & 44.062 & 59.422 \\
+ByteTrack & Train & GT labels & 9 & 761 & 0.000 & 1.495 & 1.495 \\
+ByteTrack & Train & YOLO detections & 9 & 761 & 21.298 & 1.316 & 22.614 \\
+ByteTrack & Val & GT labels & 5 & 309 & 0.000 & 1.567 & 1.567 \\
+ByteTrack & Val & YOLO detections & 5 & 309 & 16.585 & 0.942 & 17.527 \\
+ByteTrack & Test & GT labels & 3 & 372 & 0.000 & 0.872 & 0.872 \\
+ByteTrack & Test & YOLO detections & 3 & 372 & 18.916 & 0.841 & 19.757 \\
+\bottomrule
+\end{tabular}
+\end{table}
